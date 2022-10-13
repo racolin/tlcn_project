@@ -26,3 +26,7 @@ class DrawerTopList {
 
   DrawerTopList(this.title, this.imageProvider);
 }
+
+enum DrawerStatus {
+  large, small, none
+}
