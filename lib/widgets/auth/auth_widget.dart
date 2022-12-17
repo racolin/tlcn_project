@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/resoures/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:tlcn_project/providers/auth_provider/auth_provider.dart';
+import 'package:tlcn_project/resources/colors.dart';
 import 'package:tlcn_project/screens/dashboard_screen.dart';
 import 'package:tlcn_project/widgets/auth/auth_title_widget.dart';
 
@@ -38,6 +40,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(
@@ -50,8 +53,18 @@ class _AuthWidgetState extends State<AuthWidget> {
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(DashBoardScreen.routeName);
+                        // bool auth =
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .login(
+                          'Phan Trung Tin',
+                          '20789301105',
+                        )
+                            .then((value) {
+                          if (value) {
+                            Navigator.of(context)
+                                .pushNamed(DashBoardScreen.routeName);
+                          } else {}
+                        });
                       },
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all(

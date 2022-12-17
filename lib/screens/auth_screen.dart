@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tlcn_project/widgets/auth/auth_widget.dart';
 
 class AuthScreen extends StatelessWidget {

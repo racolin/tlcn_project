@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/resoures/colors.dart';
+import 'package:tlcn_project/resources/colors.dart';
 import 'package:tlcn_project/support/convert.dart';
-import 'package:tlcn_project/widgets/dashboard/total_util.dart';
+import 'package:tlcn_project/model/total_model.dart';
 
 class TotalWidget extends StatelessWidget {
-  final TotalUtils util;
+  final TotalModel util;
 
   const TotalWidget({
     Key? key,
@@ -14,7 +14,7 @@ class TotalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: util.color,
+      color: Color(util.color),
       elevation: 2,
       shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -27,7 +27,7 @@ class TotalWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(util.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 1),),
+                    Text(util.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 1),),
                     const SizedBox(height: 12,),
                     Text(
                       util.amount.toString(),

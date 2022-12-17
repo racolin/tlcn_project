@@ -1,14 +1,12 @@
-import 'dart:ui';
-
-class TotalUtils {
+class TotalModel {
   final String title;
   final String image;
-  final Color color;
+  final int color;
   final int amount;
   final double percent;
   final String time;
 
-  TotalUtils(
+  TotalModel(
     this.title,
     this.image,
     this.color,
