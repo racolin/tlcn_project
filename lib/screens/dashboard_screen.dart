@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tlcn_project/model/drawer_model.dart';
-import 'package:tlcn_project/model/user_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
+import 'package:tlcn_project/models/user_model.dart';
 import 'package:tlcn_project/providers/auth_provider/auth_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/drawer_provider.dart';

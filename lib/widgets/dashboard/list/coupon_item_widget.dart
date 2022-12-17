@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/resources/colors.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/ranks_widget.dart';
 
 class CouponItemWidget extends StatefulWidget {

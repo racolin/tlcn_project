@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tlcn_project/model/rank_model.dart';
+import 'package:tlcn_project/models/rank_model.dart';
 
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list//list_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/total_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
-import 'package:tlcn_project/model/total_model.dart';
+import 'package:tlcn_project/models/total_model.dart';
 
 class MemberDashBoard extends StatelessWidget {
   const MemberDashBoard({Key? key}) : super(key: key);

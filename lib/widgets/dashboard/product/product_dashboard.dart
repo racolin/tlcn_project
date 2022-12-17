@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_item_widget.dart';
@@ -8,7 +8,7 @@ import 'package:tlcn_project/widgets/dashboard/grid/grid_items_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/list/list_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/manage_image/manage_images_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/product/product_detail_widget.dart';
-import 'package:tlcn_project/model/product_model.dart';
+import 'package:tlcn_project/models/product_model.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
 class ProductsDashboard extends StatefulWidget {

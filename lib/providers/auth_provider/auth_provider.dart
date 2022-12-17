@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/user_model.dart';
+import 'package:tlcn_project/models/user_model.dart';
 import 'package:tlcn_project/providers/auth_provider/shared_prefs_provider.dart';
 import 'package:tlcn_project/util/auth_util.dart';
 

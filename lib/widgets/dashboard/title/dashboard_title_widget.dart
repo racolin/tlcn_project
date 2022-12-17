@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/user_model.dart';
+import 'package:tlcn_project/models/user_model.dart';
 import 'package:tlcn_project/resources/colors.dart';
 import 'package:tlcn_project/widgets/dashboard/title/search_title_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/title/user_widget.dart';
-import 'package:tlcn_project/model/drawer_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
 
 class DashboardTitleWidget extends StatelessWidget {
   const DashboardTitleWidget({

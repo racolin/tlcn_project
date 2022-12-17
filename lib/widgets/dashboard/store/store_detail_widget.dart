@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/store_model.dart';
+import 'package:tlcn_project/models/store_model.dart';
 import 'package:tlcn_project/widgets/dashboard/store/services_widget.dart';
 
 class StoreDetailWidget extends StatefulWidget {

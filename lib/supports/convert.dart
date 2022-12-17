@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 String numberToCurrency(num x, String symbol) {
-  return '${NumberFormat.currency(locale: 'en_US', symbol: '', decimalDigits: 0).format(x)} $symbol';
+  return '${NumberFormat.currency(locale: 'en_US', symbol: '', decimalDigits: 0).format(x)}$symbol';
 }
 
 String doubleToPercent(double x) {

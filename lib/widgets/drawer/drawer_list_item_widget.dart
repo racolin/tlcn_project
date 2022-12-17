@@ -5,7 +5,7 @@ import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dar
 
 import 'package:tlcn_project/widgets/drawer/drawer_item_widget.dart';
 
-import 'package:tlcn_project/model/drawer_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
 
 class DrawerListItemWidget extends StatefulWidget {
   final AnimationController controller;

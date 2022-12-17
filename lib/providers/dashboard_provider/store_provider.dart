@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tlcn_project/model/store_model.dart';
+import 'package:tlcn_project/models/store_model.dart';
 
 class StoreProvider extends ChangeNotifier {
   final StoreModel store;

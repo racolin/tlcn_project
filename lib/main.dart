@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tlcn_project/animation/slide_animation.dart';
-import 'package:tlcn_project/providers/auth_provider/auth_provider.dart';
+import 'package:tlcn_project/providers/auth_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/drawer_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:tlcn_project/providers/auth_provider/shared_prefs_provider.dart';
 import 'package:tlcn_project/screens/auth_screen.dart';
 import 'package:tlcn_project/screens/dashboard_screen.dart';
+import 'package:tlcn_project/services/cache/cache.dart';
+import 'package:tlcn_project/services/cache/cache_preferences.dart';
+import 'package:tlcn_project/services/cache/credential.dart';
 
 void main() {
   runApp(
@@ -19,13 +21,17 @@ void main() {
           create: (context) => DrawerProvider(),
         ),
         ChangeNotifierProvider<AuthProvider>(
-          create: (context) => AuthProvider(
-            Provider.of<SharedPreferencesProvider>(context, listen: false),
-          ),
+          create: (context) => AuthProvider(),
         ),
         ChangeNotifierProvider<DashboardProvider>(
           create: (context) => DashboardProvider(),
         ),
+        ChangeNotifierProvider<Credential>(
+          create: (BuildContext context) => Credential(
+            Provider.of<Cache>(context, listen: false),
+          ),
+        ),
+        Provider<Cache>(create: (_) => CachePreferences()),
       ],
       child: MaterialApp(
         // theme: ThemeData(),

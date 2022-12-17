@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/resources/colors.dart';
-import 'package:tlcn_project/support/convert.dart';
-import 'package:tlcn_project/model/total_model.dart';
+import 'package:tlcn_project/supports/convert.dart';
+import 'package:tlcn_project/models/total_model.dart';
 
 class TotalWidget extends StatelessWidget {
   final TotalModel util;

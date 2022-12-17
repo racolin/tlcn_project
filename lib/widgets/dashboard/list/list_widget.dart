@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list/coupon_item_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/list/employee_item_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/list/member_item_widget.dart';

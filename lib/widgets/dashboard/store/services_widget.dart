@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 
-import '../../../model/store_model.dart';
+import '../../../models/store_model.dart';
 
 class ServiceWidget extends StatefulWidget {
   late ServiceModel service;

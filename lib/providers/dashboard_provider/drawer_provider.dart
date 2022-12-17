@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/drawer_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
 
 class DrawerProvider {

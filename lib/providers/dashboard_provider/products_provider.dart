@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/product_model.dart';
+import 'package:tlcn_project/models/product_model.dart';
 
 enum ProductsScreenType { main, edit }
 

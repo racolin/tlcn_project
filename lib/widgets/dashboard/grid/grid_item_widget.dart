@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/support/convert.dart';
-import 'package:tlcn_project/model/branch_model.dart';
-import 'package:tlcn_project/model/product_model.dart';
+import 'package:tlcn_project/supports/convert.dart';
+import 'package:tlcn_project/models/branch_model.dart';
+import 'package:tlcn_project/models/product_model.dart';
 
 class BranchItemGrid extends StatelessWidget {
   final Branch branch;

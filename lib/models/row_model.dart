@@ -1,5 +1,5 @@
-import 'package:tlcn_project/model/product_model.dart';
-import 'package:tlcn_project/model/rank_model.dart';
+import '../../models/product_model.dart';
+import '../../models/rank_model.dart';
 
 class RowHeader {
   final List<String> headers;

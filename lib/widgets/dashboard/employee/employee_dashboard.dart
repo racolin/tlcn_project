@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list/list_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 

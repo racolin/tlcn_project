@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tlcn_project/resources/colors.dart';
 
-import 'package:tlcn_project/model/drawer_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
 
 class DrawerItemWidget extends StatelessWidget {
   final DrawerItemModel item;

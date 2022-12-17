@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
-import 'package:tlcn_project/model/branch_model.dart';
+import 'package:tlcn_project/models/branch_model.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_item_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_items_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/manage_image/manage_images_widget.dart';
-import 'package:tlcn_project/model/store_model.dart';
+import 'package:tlcn_project/models/store_model.dart';
 import 'package:tlcn_project/widgets/dashboard/store/store_detail_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 

@@ -4,7 +4,7 @@ import 'package:tlcn_project/resources/colors.dart';
 
 import 'package:tlcn_project/widgets/drawer/drawer_list_item_widget.dart';
 
-import 'package:tlcn_project/model/drawer_model.dart';
+import 'package:tlcn_project/models/drawer_model.dart';
 
 class DrawerWidget extends StatefulWidget {
   final List<DrawerItemsModel> list;

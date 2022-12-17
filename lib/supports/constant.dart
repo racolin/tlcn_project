@@ -1,0 +1,2 @@
+const double spaceBorder = 8;
+const String productDefault = 'https://img.freepik.com/premium-vector/error-404-with-cute-bubble-tea-mascot-cute-style-design-t-shirt-sticker-logo-element_152558-50831.jpg?w=900';

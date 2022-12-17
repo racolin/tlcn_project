@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tlcn_project/model/row_model.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/resources/colors.dart';
-import 'package:tlcn_project/support/convert.dart';
+import 'package:tlcn_project/supports/convert.dart';
 import 'package:tlcn_project/widgets/dashboard/list/member_item_widget.dart';
 
 class ProductItemWidget extends StatefulWidget {
