@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tlcn_project/providers/auth_provider/auth_provider.dart';
 import 'package:tlcn_project/resources/colors.dart';
-import 'package:tlcn_project/screens/dashboard_screen.dart';
 import 'package:tlcn_project/widgets/auth/auth_title_widget.dart';
+
+import '../../providers/auth_provider.dart';
+import '../../pages/dashboard_page.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key}) : super(key: key);
@@ -13,6 +14,9 @@ class AuthWidget extends StatefulWidget {
 }
 
 class _AuthWidgetState extends State<AuthWidget> {
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,6 +34,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextFormField(
+                      controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: 'Username',
                         border: OutlineInputBorder(
@@ -40,6 +45,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextFormField(
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -53,17 +59,27 @@ class _AuthWidgetState extends State<AuthWidget> {
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        // bool auth =
                         Provider.of<AuthProvider>(context, listen: false)
                             .login(
-                          'Phan Trung Tin',
-                          '20789301105',
+                          context: context,
+                          username: _usernameController.text,
+                          password: _passwordController.text,
                         )
                             .then((value) {
                           if (value) {
                             Navigator.of(context)
-                                .pushNamed(DashBoardScreen.routeName);
-                          } else {}
+                                .pushNamed(DashBoardPageRoot.routeName);
+                          } else {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Tài khoản hoặc mật khẩu không chính xác!',
+                                ),
+                              ),
+                            );
+                          }
                         });
                       },
                       style: ButtonStyle(
@@ -90,8 +106,9 @@ class _AuthWidgetState extends State<AuthWidget> {
                       child: const Text(
                         'Forgot your password!',
                         style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.blue),
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
                   ),

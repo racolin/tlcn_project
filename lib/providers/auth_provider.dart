@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:tlcn_project/models/user_model.dart';
 import '../../services/cache/cache.dart';
 import '../../services/rest_api/api.dart';
 import '../../services/rest_api/api_error.dart';
@@ -28,13 +29,22 @@ class AuthProvider extends ChangeNotifier with ApiError {
       onStart: () async {},
       onCompleted: (bool? status, dynamic res) async {
         if (status != null && status && res != null) {
-          context.read<Cache>().saveData(
+          var provider = context.read<Cache>();
+          await provider.saveData(
                 'access_token',
                 res['data']['access_token'],
               );
-          context.read<Cache>().saveData(
-                'refresh_token',
-                res['data']['refresh_token'],
+          await provider.saveData(
+              'refresh_token',
+              res['data']['refresh_token'],
+            );
+          await provider.saveData(
+                'username',
+                username,
+              );
+          await provider.saveData(
+                'avatar',
+                'https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=',
               );
         }
       },

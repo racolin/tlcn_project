@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/widgets/auth/auth_widget.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthPage extends StatelessWidget {
   static const String routeName = '/auth';
 
-  const AuthScreen({Key? key}) : super(key: key);
+  const AuthPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

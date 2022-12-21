@@ -11,6 +11,8 @@ import 'package:tlcn_project/widgets/dashboard/product/product_detail_widget.dar
 import 'package:tlcn_project/models/product_model.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
+import '../../../services/safety/base_stateful.dart';
+
 class ProductsDashboard extends StatefulWidget {
   const ProductsDashboard({Key? key}) : super(key: key);
 
@@ -18,34 +20,24 @@ class ProductsDashboard extends StatefulWidget {
   State<ProductsDashboard> createState() => _ProductsDashboardState();
 }
 
-class _ProductsDashboardState extends State<ProductsDashboard> {
-  List<Product> getProducts() {
-    return [
-      for (var i = 0; i < 10; i++)
-        Product(
-          id: '1',
-          image:
-              'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-          name: 'Hi-Tea Đào',
-          price: 29000,
-          perWeek: 100,
-          category: 'Drink',
-          hide: false,
-          dateTime: DateTime.now(),
-        ),
-    ];
-  }
-
+class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
   late ProductsProvider productsProvider;
 
   @override
-  void didChangeDependencies() {
-    productsProvider = context.watch<ProductsProvider>();
-    super.didChangeDependencies();
+  void initDependencies(BuildContext context) {
+    productsProvider = Provider.of<ProductsProvider>(context);
+    super.initDependencies(context);
+  }
+
+  @override
+  void afterFirstBuild(BuildContext context) {
+    productsProvider.loadProductUtils(context);
+    super.afterFirstBuild(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     switch (productsProvider.productsScreenType) {
       case ProductsScreenType.main:
         return getMain();
@@ -143,19 +135,22 @@ class _ProductsDashboardState extends State<ProductsDashboard> {
           ),
         ),
         Expanded(
-          child: productsProvider.gridMode
-              ? GridItemsWidget(
-                  padding: 24,
-                  list: getProducts()
-                      .map((product) => ProductItemGrid(product: product))
-                      .toList(),
-                )
-              : Container(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
-                child: ListWidget<ProductRow>(
-                    table: getListRow(),
+          child: Consumer<ProductsProvider>(
+            builder: (context, instance, child) => productsProvider.gridMode
+                ? GridItemsWidget(
+                    padding: 24,
+                    list: instance.products
+                        .map((product) => ProductItemGrid(product: product))
+                        .toList(),
+                  )
+                : Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 32),
+                    child: ListWidget<ProductRow>(
+                      table: getListRow(),
+                    ),
                   ),
-              ),
+          ),
         ),
         const PagingWidget(),
       ],

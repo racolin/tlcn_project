@@ -1,41 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/models/drawer_model.dart';
-import 'package:tlcn_project/models/user_model.dart';
-import 'package:tlcn_project/providers/auth_provider/auth_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/drawer_provider.dart';
 import 'package:tlcn_project/widgets/dashboard/title/dashboard_title_widget.dart';
 import 'package:tlcn_project/widgets/drawer/drawer_widget.dart';
 
+import '../services/safety/base_stateful.dart';
 import '../widgets/dashboard/body_dashboard.dart';
 
-
-class DashBoardScreen extends StatefulWidget {
+class DashBoardPageRoot extends StatelessWidget {
   static const String routeName = '/dashboard';
-
-  const DashBoardScreen({Key? key}) : super(key: key);
+  const DashBoardPageRoot({Key? key}) : super(key: key);
 
   @override
-  State<DashBoardScreen> createState() => _DashBoardScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<DashboardProvider>(
+      create: (context) => DashboardProvider(),
+      builder: (_, __) {
+        return const DashBoardPage();
+      },
+    );
+  }
 }
 
-class _DashBoardScreenState extends State<DashBoardScreen> {
 
-  late UserModel user;
+class DashBoardPage extends StatefulWidget {
+  const DashBoardPage({Key? key}) : super(key: key);
+
+  @override
+  State<DashBoardPage> createState() => _DashBoardPageState();
+}
+
+class _DashBoardPageState extends BaseStateful<DashBoardPage> {
   late DrawerItemModel drawerItem;
 
   @override
-  void didChangeDependencies() {
-    user = context.watch<AuthProvider>().user;
+  void initDependencies(BuildContext context) {
     drawerItem = context.watch<DashboardProvider>().itemSelected;
-    super.didChangeDependencies();
+    context.watch<DashboardProvider>().loadUser(context);
+    super.initDependencies(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    var user = context.watch<AuthProvider>().user;
-    var drawerItem = context.watch<DashboardProvider>().itemSelected;
+    super.build(context);
     return Scaffold(
       body: SizedBox(
         width: double.infinity,
@@ -46,13 +55,18 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               duration: const Duration(milliseconds: 200),
               maxWidth: 236,
               minWidth: 64,
-              title: Provider.of<DrawerProvider>(context, listen: false).drawerTitle,
-              list: Provider.of<DrawerProvider>(context, listen: false).drawerItems,
+              title: Provider.of<DrawerProvider>(context, listen: false)
+                  .drawerTitle,
+              list: Provider.of<DrawerProvider>(context, listen: false)
+                  .drawerItems,
             ),
             Expanded(
               child: Column(
                 children: [
-                  DashboardTitleWidget(drawerItem: drawerItem, user: user),
+                  DashboardTitleWidget(
+                    drawerItem: drawerItem,
+                    user: Provider.of<DashboardProvider>(context).user,
+                  ),
                   Expanded(
                     child: CustomScrollView(
                       slivers: [

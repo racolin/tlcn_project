@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tlcn_project/models/user_model.dart';
 import 'cache.dart';
 
 /// Implement Storage by SharedPreferences
@@ -42,6 +43,13 @@ class NPreferences {
     // Get data by key with cast to output data type
     return ref.get(key).toString() as T;
   }
+  //
+  Future<UserModel> getUser() async {
+    var username = await getData('username');
+    var avatar = await getData('avatar');
+    return UserModel(username: username, avatar: avatar);
+  }
+
   // Clear all
   Future<bool> clear() async {
     // Get SharedPreferences ref

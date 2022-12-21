@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/models/store_model.dart';
 
+import '../../services/rest_api/api.dart';
+import '../../services/rest_api/api_error.dart';
+import '../../services/rest_api/api_error_type.dart';
+import '../../utils/store_util.dart';
+
 enum StoresScreenType { main, edit }
 
-class StoresProvider extends ChangeNotifier {
+class StoresProvider extends ChangeNotifier with ApiError {
+
   StoresScreenType _storesScreenType = StoresScreenType.main;
-  StoreModel storeSelected = StoreModel(
+  StoresScreenType get storeScreenType => _storesScreenType;
+
+  String search = '';
+  String category = '';
+  String sortBy = '';
+  String sortOrder = '';
+
+  bool loading = false;
+  StoreModel _storeSelected = StoreModel(
     id: '1',
     images: [
       'https://i.imgur.com/rg3GBhd.jpg',
@@ -47,18 +61,51 @@ class StoresProvider extends ChangeNotifier {
           available: true),
     ],
   );
+  StoreModel get storeSelected => _storeSelected;
+  List<StoreUtil> _storeUtils = [];
+  List<StoreModel> get stores {
+    return _storeUtils.map((e) => StoreModel.fromUtil(e)).toList();
+  }
 
-  StoresScreenType get storeScreenType => _storesScreenType;
-
-  void create() {
+  void onCreate() {
     if (_storesScreenType != StoresScreenType.edit) {
       _storesScreenType = StoresScreenType.edit;
       notifyListeners();
     }
   }
 
+  Future<void> loadStoreUtils(BuildContext context) async {
+    await apiCallSafety(
+          () => Api().getDioNotAuthor("store/admin-app/list", {
+            'search': search,
+            'category': category,
+            'sortBy': sortBy,
+            'sortOrder': sortOrder,
+          }, context),
+      onStart: () async {
+        loading = true;
+      },
+      onCompleted: (bool? status, dynamic res) async {
+        loading = false;
+        if (status != null && status && res != null) {
+          if (res["data"] != null) {
+            _storeUtils = (res['data'] as List)
+                .map((e) => StoreUtil.fromJson(e))
+                .toList();
+            notifyListeners();
+          }
+        }
+      },
+      onError: (dynamic error) async {
+        final ApiErrorType errorType = await parseApiErrorType(error);
+        error = errorType.message;
+      },
+      skipOnError: true,
+    );
+  }
+
   void selectStore(String id) {
-    storeSelected = StoreModel(
+    _storeSelected = StoreModel(
       id: id,
       images: [
         'https://i.imgur.com/rg3GBhd.jpg',
@@ -80,5 +127,11 @@ class StoresProvider extends ChangeNotifier {
     );
     _storesScreenType = StoresScreenType.edit;
     notifyListeners();
+  }
+
+  @override
+  Future<int> onApiError(error) {
+    // TODO: implement onApiError
+    throw UnimplementedError();
   }
 }

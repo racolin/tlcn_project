@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tlcn_project/utils/store_util.dart';
 
 class ServiceModel {
   final IconData icon;
@@ -50,4 +51,17 @@ class StoreModel {
     required this.storeServices,
     required this.itemMenus,
   });
+
+  factory StoreModel.fromUtil(StoreUtil util) {
+    return StoreModel(
+      id: util.id,
+      images: [],
+      storeName: util.name,
+      openTime: TimeOfDay.now(),
+      closeTime: TimeOfDay.now(),
+      address: util.fullAddress,
+      storeServices: [],
+      itemMenus: [],
+    );
+  }
 }

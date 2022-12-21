@@ -40,10 +40,10 @@ class FilterWidget extends StatelessWidget {
                     );
                     return;
                   case 'Store':
-                    Provider.of<StoresProvider>(context, listen: false).create();
+                    Provider.of<StoresProvider>(context, listen: false).onCreate();
                     return;
                   case 'Product':
-                    Provider.of<ProductsProvider>(context, listen: false).create();
+                    Provider.of<ProductsProvider>(context, listen: false).onCreate();
                     return;
                 }
               },
@@ -53,12 +53,12 @@ class FilterWidget extends StatelessWidget {
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     side: const BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
               child: const Padding(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(4),
                 child: Text(
                   'Create',
                   style: TextStyle(color: Colors.white),
@@ -70,7 +70,7 @@ class FilterWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             decoration: BoxDecoration(
               border: Border.all(),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
               children: [
@@ -83,13 +83,13 @@ class FilterWidget extends StatelessWidget {
                     padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),
                   onPressed: () {},
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(12),
                     child: const Text('Filter'),
                   ),
                 )

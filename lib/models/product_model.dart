@@ -1,3 +1,5 @@
+import 'package:tlcn_project/utils/product_util.dart';
+
 class Product {
   final String id;
   final String image;
@@ -18,4 +20,17 @@ class Product {
     required this.dateTime,
     required this.hide,
   });
+
+  factory Product.fromUtil(ProductUtil util) {
+    return Product(
+      id: util.id,
+      image: util.mainImage,
+      name: util.name,
+      price: util.originalPrice.toDouble(),
+      perWeek: util.saleOfWeek,
+      category: util.categoryName,
+      dateTime: util.updatedAt,
+      hide: util.deleted,
+    );
+  }
 }

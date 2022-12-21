@@ -3,24 +3,30 @@ import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 
 class SearchTitleWidget extends StatefulWidget {
-  const SearchTitleWidget({Key? key}) : super(key: key);
+  final Function(String) onSearch;
+
+  const SearchTitleWidget({
+    Key? key,
+    required this.onSearch,
+  }) : super(key: key);
 
   @override
   State<SearchTitleWidget> createState() => _SearchTitleWidgetState();
 }
 
 class _SearchTitleWidgetState extends State<SearchTitleWidget> {
-  // var filter = '1';
+  final _controllerSearch = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(
+        SizedBox(
           width: 300,
           height: 48,
           child: TextField(
-            decoration: InputDecoration(
+            controller: _controllerSearch,
+            decoration: const InputDecoration(
               labelText: 'Search',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.only(
@@ -36,9 +42,17 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
           height: 48,
           alignment: Alignment.center,
           decoration: BoxDecoration(
+            color: Colors.blue,
             border: Border.all(color: Colors.grey),
           ),
-          child: Text(context.watch<DashboardProvider>().itemSelected.title),
+          child: Text(
+            context.watch<DashboardProvider>().itemSelected.title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.white
+            ),
+          ),
           // DropdownButton<String>(
           //     underline: const SizedBox(),
           //     value: filter,
@@ -94,7 +108,10 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
             ),
           ),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<DashboardProvider>(context, listen: false).onSearch(_controllerSearch.text);
+              widget.onSearch(_controllerSearch.text);
+            },
             icon: const Icon(Icons.search),
             color: Colors.white,
           ),

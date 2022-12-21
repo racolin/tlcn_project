@@ -24,6 +24,7 @@ class _PagingWidgetState extends State<PagingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    return Container();
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 32),
