@@ -7,6 +7,9 @@ import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list/list_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
+import '../../../models/filter_field_model.dart';
+import '../../../models/filter_model.dart';
+
 class EmployeeDashBoard extends StatefulWidget {
   const EmployeeDashBoard({Key? key}) : super(key: key);
 
@@ -43,15 +46,17 @@ class _EmployeeDashBoardState extends BaseStateful<EmployeeDashBoard> {
     return Column(
       children: [
         FilterWidget(
-          hasCreate: true,
           onCreate: (EmployeeModel employee) {},
-          items: const [
-            [
-              'Role',
-              'Admin',
-              'Salesperson',
-              // 'Warehouse staff',
-            ],
+          items: [
+            FilterModel(
+              key: 'role',
+              name: 'Lọc theo',
+              values: [
+                FilterFieldModel(value: 'salesman', name: 'Nhân viên'),
+                FilterFieldModel(value: 'admin', name: 'Quản lý'),
+              ],
+              itemSelected: 0,
+            ),
           ],
         ),
         Expanded(

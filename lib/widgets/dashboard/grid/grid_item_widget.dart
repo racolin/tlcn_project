@@ -89,7 +89,7 @@ class BranchItemGrid extends StatelessWidget {
 }
 
 class ProductItemGrid extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
 
   const ProductItemGrid({
     Key? key,

@@ -1,6 +1,6 @@
 import 'package:tlcn_project/utils/product_util.dart';
 
-class Product {
+class ProductModel {
   final String id;
   final String image;
   final String name;
@@ -10,7 +10,7 @@ class Product {
   final DateTime dateTime;
   final bool hide;
 
-  Product({
+  ProductModel({
     required this.id,
     required this.image,
     required this.name,
@@ -21,8 +21,8 @@ class Product {
     required this.hide,
   });
 
-  factory Product.fromUtil(ProductUtil util) {
-    return Product(
+  factory ProductModel.fromUtil(ProductUtil util) {
+    return ProductModel(
       id: util.id,
       image: util.mainImage,
       name: util.name,

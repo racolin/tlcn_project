@@ -5,6 +5,9 @@ import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list/list_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
+import '../../../models/filter_field_model.dart';
+import '../../../models/filter_model.dart';
+
 class PromotionDashboard extends StatelessWidget {
   const PromotionDashboard({Key? key}) : super(key: key);
 
@@ -22,7 +25,7 @@ class PromotionDashboard extends StatelessWidget {
     var rows = [
       for (var i = 0; i < 10; i++)
         PromotionRow(
-          promotion: Promotion(
+          promotion: PromotionModel(
             id: '1',
             partner: 'The Coffee house',
             title: 'Buy 1 get 1 Drink',
@@ -48,33 +51,50 @@ class PromotionDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const FilterWidget(
-          hasCreate: true,
+        FilterWidget(
+          onCreate: (PromotionModel promotion) {},
           items: [
-            [
-              'Partner',
-              'The Coffee House',
-              'Starbucks',
-              'Caphe Trung Tin Pro',
-            ],
-            [
-              'Apply to',
-              'Diamond',
-              'Gold',
-              'Sliver',
-            ],
-            [
-              'Status',
-              'Opening',
-              'Closed',
-              'Pending',
-            ],
-            [
-              'Sort by',
-              'Admin',
-              'Salesperson',
-              'Warehouse staff',
-            ],
+            FilterModel(
+              key: 'store',
+              name: ' Cửa hàng',
+              values: [
+                FilterFieldModel(value: '_id', name: 'Partner'),
+                FilterFieldModel(value: 'title', name: 'The Coffee House'),
+                FilterFieldModel(value: 'code', name: 'Starbucks'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'applyTo',
+              name: 'Áp dụng',
+              values: [
+                FilterFieldModel(value: 'new', name: 'Mới'),
+                FilterFieldModel(value: 'bronze', name: 'Đồng'),
+                FilterFieldModel(value: 'sliver', name: 'Bạc'),
+                FilterFieldModel(value: 'gold', name: 'Vàng'),
+                FilterFieldModel(value: 'diamond', name: 'Kim cương'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'status',
+              name: 'Trạng thái',
+              values: [
+                FilterFieldModel(value: 'all', name: 'Tất cả'),
+                FilterFieldModel(value: 'disabled', name: 'Disabled'),
+                FilterFieldModel(value: 'enable', name: 'Enable'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortOrder',
+              name: 'Sắp xếp',
+              values: [
+                FilterFieldModel(value: 'asc', name: 'Tăng dần'),
+                FilterFieldModel(value: 'desc', name: 'Giảm dần'),
+              ],
+              itemSelected: 0,
+            ),
           ],
         ),
         Expanded(

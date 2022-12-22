@@ -14,8 +14,8 @@ class MemberProvider extends ChangeNotifier with ApiError {
 
   MembersScreenType get membersScreenType => _membersScreenType;
 
-  String search = '';
-  String role = '';
+  String keyword = '';
+  Map<String, String> filter = {};
 
   bool loading = false;
   List<String> headers = [
@@ -54,6 +54,11 @@ class MemberProvider extends ChangeNotifier with ApiError {
     List<MemberModel> result =
         _memberUtils.map((e) => MemberModel.fromUtil(e)).toList();
     return result;
+  }
+
+  void onSearch(BuildContext context, String keyword) {
+    this.keyword = keyword;
+    loadMemberUtils(context);
   }
 
   Future<void> loadMemberUtils(BuildContext context) async {

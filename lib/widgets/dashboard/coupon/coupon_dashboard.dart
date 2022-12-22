@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tlcn_project/models/filter_field_model.dart';
+import 'package:tlcn_project/models/filter_model.dart';
 import 'package:tlcn_project/models/rank_model.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
 import 'package:tlcn_project/models/row_model.dart';
@@ -48,31 +50,41 @@ class CouponDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const FilterWidget(
-          hasCreate: true,
+        FilterWidget(
           items: [
-            [
-              'Apply to',
-              'Diamond',
-              'Gold',
-              'Sliver',
-            ],
-            [
-              'Scope',
-              'Public',
-              'Own',
-            ],
-            [
-              'Type',
-              'Periodic',
-            ],
-            [
-              'Sort by',
-              'Admin',
-              'Salesperson',
-              'Warehouse staff',
-            ],
+            FilterModel(
+              key: 'status',
+              name: 'Trạng thái',
+              values: [
+                FilterFieldModel(value: 'all', name: 'Tất cả'),
+                FilterFieldModel(value: 'disabled', name: 'Disabled'),
+                FilterFieldModel(value: 'enable', name: 'Enable'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortBy',
+              name: 'Lọc theo',
+              values: [
+                FilterFieldModel(value: '_id', name: 'Mã id'),
+                FilterFieldModel(value: 'title', name: 'Tên'),
+                FilterFieldModel(value: 'code', name: 'Mã code'),
+                FilterFieldModel(value: 'amountApplyHour', name: 'Thời hạn'),
+                FilterFieldModel(value: 'deleted', name: 'Đã xoá'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortOrder',
+              name: 'Sắp xếp',
+              values: [
+                FilterFieldModel(value: 'asc', name: 'Tăng dần'),
+                FilterFieldModel(value: 'desc', name: 'Giảm dần'),
+              ],
+              itemSelected: 0,
+            ),
           ],
+          onCreate: () {},
         ),
         Expanded(
           child: Container(

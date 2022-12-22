@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tlcn_project/models/product_model.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  final Product? product;
+  final ProductModel? product;
 
   const ProductDetailWidget({
     Key? key,

@@ -14,10 +14,8 @@ class StoresProvider extends ChangeNotifier with ApiError {
   StoresScreenType _storesScreenType = StoresScreenType.main;
   StoresScreenType get storeScreenType => _storesScreenType;
 
-  String search = '';
-  String category = '';
-  String sortBy = '';
-  String sortOrder = '';
+  String keyword = '';
+  Map<String, String> filter = {};
 
   bool loading = false;
   StoreModel _storeSelected = StoreModel(
@@ -75,13 +73,15 @@ class StoresProvider extends ChangeNotifier with ApiError {
     }
   }
 
+  void onSearch(BuildContext context, String keyword) {
+    this.keyword = keyword;
+    loadStoreUtils(context);
+  }
+
   Future<void> loadStoreUtils(BuildContext context) async {
     await apiCallSafety(
           () => Api().getDioNotAuthor("store/admin-app/list", {
-            'search': search,
-            'category': category,
-            'sortBy': sortBy,
-            'sortOrder': sortOrder,
+            'keyword': keyword,
           }, context),
       onStart: () async {
         loading = true;

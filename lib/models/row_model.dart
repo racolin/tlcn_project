@@ -168,7 +168,7 @@ class CouponRow extends ItemRow {
 
 //Promotion
 
-class Promotion {
+class PromotionModel {
   final String id;
   final String partner;
   final String title;
@@ -178,7 +178,7 @@ class Promotion {
   final String status;
   final bool hide;
 
-  Promotion({
+  PromotionModel({
     required this.id,
     required this.partner,
     required this.title,
@@ -191,7 +191,7 @@ class Promotion {
 }
 
 class PromotionRow extends ItemRow {
-  final Promotion promotion;
+  final PromotionModel promotion;
 
   PromotionRow({required this.promotion}) {
     _columnCounts = 8;
@@ -199,7 +199,7 @@ class PromotionRow extends ItemRow {
 }
 
 class ProductRow extends ItemRow {
-  final Product product;
+  final ProductModel product;
 
   ProductRow({required this.product}) {
     _columnCounts = 7;

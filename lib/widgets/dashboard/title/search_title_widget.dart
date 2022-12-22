@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 
+import '../../../providers/dashboard_provider/employee_provider.dart';
+import '../../../providers/dashboard_provider/member_provider.dart';
+import '../../../providers/dashboard_provider/products_provider.dart';
+import '../../../providers/dashboard_provider/stores_provider.dart';
+
 class SearchTitleWidget extends StatefulWidget {
   final Function(String) onSearch;
 
@@ -48,10 +53,7 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
           child: Text(
             context.watch<DashboardProvider>().itemSelected.title,
             style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.white
-            ),
+                fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
           ),
           // DropdownButton<String>(
           //     underline: const SizedBox(),
@@ -109,8 +111,39 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
           ),
           child: IconButton(
             onPressed: () {
-              Provider.of<DashboardProvider>(context, listen: false).onSearch(_controllerSearch.text);
-              widget.onSearch(_controllerSearch.text);
+              switch (Provider.of<DashboardProvider>(
+                context,
+                listen: false,
+              ).itemSelected.title) {
+                case 'Dashboard':
+                // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  return;
+                case 'Employee':
+                  Provider.of<EmployeeProvider>(context, listen: false)
+                      .onSearch(context, _controllerSearch.text);
+                  return;
+                case 'Store':
+                  Provider.of<StoresProvider>(context, listen: false)
+                      .onSearch(context, _controllerSearch.text);
+                  return;
+                case 'Product':
+                  Provider.of<ProductsProvider>(context, listen: false)
+                      .onSearch(context, _controllerSearch.text);
+                  return;
+                case 'Member':
+                  Provider.of<MemberProvider>(context, listen: false)
+                      .onSearch(context, _controllerSearch.text);
+                  return;
+                case 'Coupon':
+                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  return;
+                case 'Promotion':
+                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  return;
+                case 'Order History':
+                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  return;
+              }
             },
             icon: const Icon(Icons.search),
             color: Colors.white,

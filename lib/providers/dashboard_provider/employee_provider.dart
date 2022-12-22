@@ -13,8 +13,9 @@ class EmployeeProvider extends ChangeNotifier with ApiError {
 
   EmployeesScreenType get employeesScreenType => _employeesScreenType;
 
-  String search = '';
-  String role = '';
+  String keyword = '';
+
+  Map<String, String> filter = {};
 
   bool loading = false;
   List<String> headers = [
@@ -119,8 +120,7 @@ class EmployeeProvider extends ChangeNotifier with ApiError {
       () => Api().getDioNotAuthor(
           "employee/create",
           {
-            'search': search,
-            'role': role,
+            'keyword': keyword,
           },
           context),
       onStart: () async {
@@ -143,6 +143,11 @@ class EmployeeProvider extends ChangeNotifier with ApiError {
       },
       skipOnError: true,
     );
+  }
+
+  void onSearch(BuildContext context, String keyword) {
+    this.keyword = keyword;
+    loadEmployeeUtils(context);
   }
 
   Future<void> createEmployee(

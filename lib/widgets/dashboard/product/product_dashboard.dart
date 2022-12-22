@@ -11,6 +11,8 @@ import 'package:tlcn_project/widgets/dashboard/product/product_detail_widget.dar
 import 'package:tlcn_project/models/product_model.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
+import '../../../models/filter_field_model.dart';
+import '../../../models/filter_model.dart';
 import '../../../services/safety/base_stateful.dart';
 
 class ProductsDashboard extends StatefulWidget {
@@ -52,20 +54,21 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const FilterWidget(
-          hasCreate: true,
+        FilterWidget(
+          onCreate: (ProductModel product) {},
           items: [
-            [
-              'Category',
-              'The Coffee House',
-              'Starbucks',
-            ],
-            [
-              'Sort by',
-              'Diamond',
-              'Gold',
-              'Sliver',
-            ],
+            FilterModel(
+              key: 'sortBy',
+              name: 'Lọc theo',
+              values: [
+                FilterFieldModel(value: '_id', name: 'Mã id'),
+                FilterFieldModel(value: 'email', name: 'Email'),
+                FilterFieldModel(value: 'mobile', name: 'Điện thoại'),
+                FilterFieldModel(value: 'firstName', name: 'Họ'),
+                FilterFieldModel(value: 'lastName', name: 'Tên'),
+              ],
+              itemSelected: 0,
+            ),
           ],
         ),
         Padding(
@@ -175,7 +178,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
     return table;
   }
 
-  Widget getEdit(Product? product) {
+  Widget getEdit(ProductModel? product) {
     return Row(
       children: [
         Container(

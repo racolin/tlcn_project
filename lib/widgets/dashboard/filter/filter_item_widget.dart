@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tlcn_project/models/filter_model.dart';
 
 class FilterItemWidget extends StatefulWidget {
-  final List<String> items;
+  final FilterModel items;
+  final Function(int) onSelect;
 
   const FilterItemWidget({
     Key? key,
     required this.items,
+    required this.onSelect,
   }) : super(key: key);
 
   @override
@@ -29,17 +32,20 @@ class _FilterItemWidgetState extends State<FilterItemWidget> {
         borderRadius: BorderRadius.circular(4),
         underline: const SizedBox(),
         items: [
-          for (int i = 0; i < widget.items.length; i++)
+          for (int i = 0; i < widget.items.values.length; i++)
             DropdownMenuItem(
               value: i,
-              child: Text(widget.items[i]),
+              child: Text(widget.items.values[i].name),
             ),
         ],
         value: selected,
         onChanged: (value) {
-          setState(() {
-            selected = value!;
-          });
+          if (value != null) {
+            widget.onSelect(value);
+            setState(() {
+              selected = value;
+            });
+          }
         },
       ),
     );

@@ -8,4 +8,5 @@ enum DashboardType {
   promotion,
   memberSettings,
   appSettings,
+  orderHistory,
 }

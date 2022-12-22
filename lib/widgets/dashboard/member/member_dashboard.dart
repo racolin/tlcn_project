@@ -12,6 +12,9 @@ import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
 import 'package:tlcn_project/models/total_model.dart';
 
+import '../../../models/filter_field_model.dart';
+import '../../../models/filter_model.dart';
+
 class MemberDashBoard extends StatefulWidget {
   const MemberDashBoard({Key? key}) : super(key: key);
 
@@ -115,26 +118,33 @@ class _MemberDashBoardState extends BaseStateful<MemberDashBoard> {
               ),
             ),
           ),
-          const FilterWidget(
-            hasCreate: false,
+          FilterWidget(
+            onCreate: (MemberModel member) {},
             items: [
-              [
-                'Rank',
-                'Diamond',
-                'Gold',
-                'Sliver',
-                'Bronze',
-                'New',
-              ],
-              [
-                'Sort by',
-                'Member rank',
-                'Total point',
-                'Used point',
-                'Current point',
-                'Join date',
-                'Action'
-              ],
+              FilterModel(
+                key: 'sortBy',
+                name: 'Lọc theo',
+                values: [
+                  FilterFieldModel(value: '_id', name: 'Mã id'),
+                  FilterFieldModel(value: 'email', name: 'Email'),
+                  FilterFieldModel(value: 'mobile', name: 'Điện thoại'),
+                  FilterFieldModel(value: 'firstName', name: 'Họ'),
+                  FilterFieldModel(value: 'lastName', name: 'Tên'),
+                ],
+                itemSelected: 0,
+              ),
+              FilterModel(
+                key: 'rank',
+                name: 'Rank',
+                values: [
+                  FilterFieldModel(value: 'new', name: 'Mới'),
+                  FilterFieldModel(value: 'bronze', name: 'Đồng'),
+                  FilterFieldModel(value: 'sliver', name: 'Bạc'),
+                  FilterFieldModel(value: 'gold', name: 'Vàng'),
+                  FilterFieldModel(value: 'diamond', name: 'Kim cương'),
+                ],
+                itemSelected: 0,
+              ),
             ],
           ),
           Expanded(

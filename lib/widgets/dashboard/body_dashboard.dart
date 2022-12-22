@@ -67,6 +67,10 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
             return const Center(
               child: Text('App Setting'),
             );
+          case DashboardType.orderHistory:
+            return const Center(
+              child: Text('Lịch sử đơn hàng'),
+            );
           default:
             return ChangeNotifierProvider<MemberProvider>(
               create: (context) => MemberProvider(),

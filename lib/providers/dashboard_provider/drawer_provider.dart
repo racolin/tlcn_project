@@ -14,6 +14,7 @@ class DrawerProvider {
         DrawerItemModel('Product', Icons.emoji_food_beverage, DashboardType.product),
         DrawerItemModel('Coupon', Icons.corporate_fare, DashboardType.coupon),
         DrawerItemModel('Promotion', Icons.rate_review, DashboardType.promotion),
+        DrawerItemModel('Order History', Icons.list_alt, DashboardType.orderHistory),
       ],
     ),
     DrawerItemsModel(

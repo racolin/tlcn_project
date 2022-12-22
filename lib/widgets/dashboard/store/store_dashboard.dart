@@ -10,6 +10,9 @@ import 'package:tlcn_project/models/store_model.dart';
 import 'package:tlcn_project/widgets/dashboard/store/store_detail_widget.dart';
 import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
+import '../../../models/filter_field_model.dart';
+import '../../../models/filter_model.dart';
+
 class StoresDashboard extends StatefulWidget {
   const StoresDashboard({Key? key}) : super(key: key);
 
@@ -53,21 +56,40 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
   Widget getMain() {
     return Column(
       children: [
-        const FilterWidget(
-          hasCreate: true,
+        FilterWidget(
+          onCreate: (StoreModel store) {},
           items: [
-            [
-              'Category',
-              'The Coffee House',
-              'Starbucks',
-              'Caphe Trung Tin Pro',
-            ],
-            [
-              'Sort by',
-              'Diamond',
-              'Gold',
-              'Sliver',
-            ],
+            FilterModel(
+              key: 'status',
+              name: 'Trạng thái',
+              values: [
+                FilterFieldModel(value: 'all', name: 'Tất cả'),
+                FilterFieldModel(value: 'disabled', name: 'Disabled'),
+                FilterFieldModel(value: 'enable', name: 'Enable'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortBy',
+              name: 'Lọc theo',
+              values: [
+                FilterFieldModel(value: '_id', name: 'Mã id'),
+                FilterFieldModel(value: 'title', name: 'Tên'),
+                FilterFieldModel(value: 'code', name: 'Mã code'),
+                FilterFieldModel(value: 'amountApplyHour', name: 'Thời hạn'),
+                FilterFieldModel(value: 'deleted', name: 'Đã xoá'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortOrder',
+              name: 'Sắp xếp',
+              values: [
+                FilterFieldModel(value: 'asc', name: 'Tăng dần'),
+                FilterFieldModel(value: 'desc', name: 'Giảm dần'),
+              ],
+              itemSelected: 0,
+            ),
           ],
         ),
         Consumer<StoresProvider>(
