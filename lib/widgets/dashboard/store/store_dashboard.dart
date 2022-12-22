@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
+import 'package:tlcn_project/services/safety/base_stateful.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
-import 'package:tlcn_project/models/branch_model.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_item_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_items_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/manage_image/manage_images_widget.dart';
@@ -17,31 +17,29 @@ class StoresDashboard extends StatefulWidget {
   State<StoresDashboard> createState() => _StoresDashboardState();
 }
 
-class _StoresDashboardState extends State<StoresDashboard> {
-  List<Branch> getBranches() {
-    return [
-      for (var i = 0; i < 10; i++)
-        Branch(
-          name: 'The Coffee House',
-          image: 'https://i.imgur.com/rg3GBhd.jpg',
-          description: '1 Vo Van Ngan Street, Linh Chieu Ward, Thu Duc City',
-          opened: DateTime.now(),
-        )
-    ];
-  }
-
-  // StoreScreenType? type;
+class _StoresDashboardState extends BaseStateful<StoresDashboard> {
   late StoresProvider storeProvider;
 
   @override
+  void afterFirstBuild(BuildContext context) {
+    storeProvider.loadStoreUtils(context);
+    super.afterFirstBuild(context);
+  }
+
+  @override
+  void initDependencies(BuildContext context) {
+    storeProvider = context.read<StoresProvider>();
+    super.initDependencies(context);
+  }
+
+  @override
   void didChangeDependencies() {
-    storeProvider = context.watch<StoresProvider>();
-    // .storeScreenType;
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     switch (storeProvider.storeScreenType) {
       case StoresScreenType.main:
         return getMain();
@@ -72,12 +70,14 @@ class _StoresDashboardState extends State<StoresDashboard> {
             ],
           ],
         ),
-        Expanded(
-          child: GridItemsWidget(
-            padding: 24,
-            list: getBranches()
-                .map((branch) => BranchItemGrid(branch: branch))
-                .toList(),
+        Consumer<StoresProvider>(
+          builder: (context, instance, child) => Expanded(
+            child: GridItemsWidget(
+              padding: 24,
+              list: instance.stores
+                  .map((branch) => BranchItemGrid(branch: branch))
+                  .toList(),
+            ),
           ),
         ),
         const PagingWidget(),

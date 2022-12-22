@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
@@ -9,10 +10,12 @@ import 'package:tlcn_project/widgets/dashboard/filter/filter_item_widget.dart';
 class FilterWidget extends StatelessWidget {
   final List<List<String>> items;
   final bool hasCreate;
+  final Function? onCreate;
 
   const FilterWidget({
     Key? key,
     required this.hasCreate,
+    this.onCreate,
     required this.items,
   }) : super(key: key);
 
@@ -25,19 +28,22 @@ class FilterWidget extends StatelessWidget {
         children: [
           if (hasCreate)
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 String title =
                     Provider.of<DashboardProvider>(context, listen: false)
                         .itemSelected
                         .title;
                 switch (title) {
                   case 'Employee':
-                    showDialog(
+                    EmployeeModel employee = await showDialog(
                       context: context,
                       builder: (context) {
                         return const CreateEmployeeModal();
                       },
                     );
+                    if (onCreate != null) {
+                      onCreate!(employee);
+                    }
                     return;
                   case 'Store':
                     Provider.of<StoresProvider>(context, listen: false).onCreate();

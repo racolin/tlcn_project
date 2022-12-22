@@ -1,3 +1,5 @@
+import 'package:tlcn_project/services/rest_api/api.dart';
+
 class MemberUtil {
   final String id;
   final String email;
@@ -31,12 +33,10 @@ class MemberUtil {
       firstName: json['firstName'] ?? '',
       lastName: json['lastName'] ?? '',
       gender: json['gender'] ?? '',
-      dob: json['gender'] == null
+      dob: json['dob'] == null
           ? DateTime.now()
-          : DateTime.parse(json['gender']),
-      memberInfo: json['memberInfo'] == null
-          ? MemberInfoUtil.empty()
-          : MemberInfoUtil.fromJson(json['memberInfo']),
+          : DateTime.parse(json['dob']),
+      memberInfo: MemberInfoUtil.fromJson(json['memberInfo'] ?? {}),
       joinedAt: json['joinedAt'] == null
           ? DateTime.now()
           : DateTime.parse(json['joinedAt']),
@@ -137,9 +137,9 @@ class RankDisplayUtil {
 
   factory RankDisplayUtil.fromJson(Map<String, dynamic> json) {
     return RankDisplayUtil(
-      icon: json['icon'] ?? '',
+      icon: Api().getFullImageUrl(json['icon']),
       color: json['color'] ?? '',
-      background: json['background'] ?? '',
+      background: Api().getFullImageUrl(json['background']),
     );
   }
 

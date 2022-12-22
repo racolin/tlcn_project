@@ -4,6 +4,8 @@ import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/widgets/dashboard/list/member_item_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/list/header_widget.dart';
 
+import '../../../supports/convert.dart';
+
 class EmployeeItemWidget extends StatefulWidget {
   final EmployeeRow row;
   final List<int> rate;
@@ -60,21 +62,21 @@ class _EmployeeItemWidgetState extends State<EmployeeItemWidget> {
                 flex: widget.rate[3],
                 child: Text(
                   employee.email,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(
                 flex: widget.rate[4],
                 child: Text(
                   employee.role,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(
                 flex: widget.rate[5],
                 child: Text(
-                  employee.joinDate.toString(),
-                  style: TextStyle(fontSize: 16),
+                  dateToString(employee.joinDate, 'dd/MM/yyyy'),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(

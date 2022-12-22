@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
+import 'package:tlcn_project/providers/dashboard_provider/employee_provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/member_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
@@ -34,9 +36,15 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
               child: Text('Dashboard'),
             );
           case DashboardType.member:
-            return const MemberDashBoard();
+            return ChangeNotifierProvider<MemberProvider>(
+              create: (context) => MemberProvider(),
+              child: const MemberDashBoard(),
+            );
           case DashboardType.employee:
-            return const EmployeeDashBoard();
+            return ChangeNotifierProvider<EmployeeProvider>(
+              create: (context) => EmployeeProvider(),
+              child: const EmployeeDashBoard(),
+            );
           case DashboardType.store:
             return ChangeNotifierProvider<StoresProvider>(
               create: (context) => StoresProvider(),
@@ -60,7 +68,10 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
               child: Text('App Setting'),
             );
           default:
-            return const MemberDashBoard();
+            return ChangeNotifierProvider<MemberProvider>(
+              create: (context) => MemberProvider(),
+              child: const MemberDashBoard(),
+            );
         }
       },
     );

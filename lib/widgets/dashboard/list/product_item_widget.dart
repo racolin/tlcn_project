@@ -67,7 +67,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
               Expanded(
                 flex: widget.rate[5],
                 child: Text(
-                  dateToString(product.dateTime, 'hh:MM dd/mm/yyyy'),
+                  dateToString(product.dateTime, 'hh:mm dd/MM/yyyy'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ),

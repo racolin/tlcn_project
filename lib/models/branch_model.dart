@@ -1,3 +1,5 @@
+import 'package:tlcn_project/utils/store_util.dart';
+
 class Branch {
   final String name;
   final String image;
@@ -10,4 +12,13 @@ class Branch {
     required this.description,
     required this.opened,
   });
+
+  factory Branch.fromUtil(StoreUtil util) {
+    return Branch(
+      name: util.name,
+      image: util.mainImage,
+      description: util.fullAddress,
+      opened: util.updatedAt,
+    );
+  }
 }

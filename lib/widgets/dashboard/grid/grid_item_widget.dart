@@ -14,7 +14,7 @@ class BranchItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 280,
+      width: 235,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Column(
@@ -82,7 +82,7 @@ class BranchItemGrid extends StatelessWidget {
         fit: BoxFit.cover,
         image,
         height: 150,
-        width: 280,
+        width: 235,
       ),
     );
   }
@@ -99,7 +99,7 @@ class ProductItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 280,
+      width: 235,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Column(
@@ -170,7 +170,7 @@ class ProductItemGrid extends StatelessWidget {
                           size: 20,
                         ),
                         Text(
-                          dateToString(product.dateTime, 'hh:MM dd/mm/yyyy'),
+                          dateToString(product.dateTime, 'hh:mm dd/MM/yyyy'),
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 13,
@@ -198,7 +198,7 @@ class ProductItemGrid extends StatelessWidget {
         fit: BoxFit.cover,
         image,
         height: 150,
-        width: 280,
+        width: 235,
       ),
     );
   }

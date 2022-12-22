@@ -21,28 +21,28 @@ class ProductsDashboard extends StatefulWidget {
 }
 
 class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
-  late ProductsProvider productsProvider;
+  late ProductsProvider _productsProvider;
 
   @override
   void initDependencies(BuildContext context) {
-    productsProvider = Provider.of<ProductsProvider>(context);
+    _productsProvider = Provider.of<ProductsProvider>(context);
     super.initDependencies(context);
   }
 
   @override
   void afterFirstBuild(BuildContext context) {
-    productsProvider.loadProductUtils(context);
+    _productsProvider.loadProductUtils(context);
     super.afterFirstBuild(context);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    switch (productsProvider.productsScreenType) {
+    switch (_productsProvider.productsScreenType) {
       case ProductsScreenType.main:
         return getMain();
       case ProductsScreenType.edit:
-        return getEdit(productsProvider.productSelected);
+        return getEdit(_productsProvider.productSelected);
       default:
         return getMain();
     }
@@ -59,7 +59,6 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
               'Category',
               'The Coffee House',
               'Starbucks',
-              'Caphe Trung Tin Pro',
             ],
             [
               'Sort by',
@@ -77,7 +76,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      productsProvider.setGridMode(false);
+                      _productsProvider.setGridMode(false);
                     });
                   },
                   borderRadius: const BorderRadius.horizontal(
@@ -89,7 +88,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: !productsProvider.gridMode
+                      color: !_productsProvider.gridMode
                           ? Colors.red.withOpacity(0.8)
                           : Colors.blue.withOpacity(0.8),
                       borderRadius: const BorderRadius.horizontal(
@@ -105,7 +104,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      productsProvider.setGridMode(true);
+                      _productsProvider.setGridMode(true);
                     });
                   },
                   borderRadius: const BorderRadius.horizontal(
@@ -117,7 +116,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: productsProvider.gridMode
+                      color: _productsProvider.gridMode
                           ? Colors.red.withOpacity(0.8)
                           : Colors.blue.withOpacity(0.8),
                       borderRadius: const BorderRadius.horizontal(
@@ -136,7 +135,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
         ),
         Expanded(
           child: Consumer<ProductsProvider>(
-            builder: (context, instance, child) => productsProvider.gridMode
+            builder: (context, instance, child) => _productsProvider.gridMode
                 ? GridItemsWidget(
                     padding: 24,
                     list: instance.products
@@ -168,7 +167,7 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
       'ACTION'
     ]);
     var rows = <ProductRow>[
-      for (var product in productsProvider.products)
+      for (var product in _productsProvider.products)
         ProductRow(product: product),
     ];
     var rate = <int>[1, 4, 2, 2, 2, 2, 2];

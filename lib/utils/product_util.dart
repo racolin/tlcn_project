@@ -65,8 +65,8 @@ class ProductUtil {
       categoryName: json['categoryName'] ?? '',
       changedAmount: json['changedAmount'] ?? 0,
       saleOfWeek: json['saleOfWeek'] ?? 0,
-      updatedAt: json['description'] != null
-          ? DateTime.parse(json['description'])
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'])
           : DateTime.now(),
       allCategories: json['allCategories'] == null
           ? []

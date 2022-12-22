@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tlcn_project/models/rank_model.dart';
+import 'package:provider/provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/member_provider.dart';
+import 'package:tlcn_project/services/safety/base_stateful.dart';
 
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
 import 'package:tlcn_project/models/row_model.dart';
@@ -10,8 +12,27 @@ import 'package:tlcn_project/widgets/paging/paging_widget.dart';
 
 import 'package:tlcn_project/models/total_model.dart';
 
-class MemberDashBoard extends StatelessWidget {
+class MemberDashBoard extends StatefulWidget {
   const MemberDashBoard({Key? key}) : super(key: key);
+
+  @override
+  State<MemberDashBoard> createState() => _MemberDashBoardState();
+}
+
+class _MemberDashBoardState extends BaseStateful<MemberDashBoard> {
+  late MemberProvider _memberProvider;
+
+  @override
+  void initDependencies(BuildContext context) {
+    super.initDependencies(context);
+    _memberProvider = Provider.of<MemberProvider>(context, listen: false);
+  }
+
+  @override
+  void afterFirstBuild(BuildContext context) {
+    super.afterFirstBuild(context);
+    _memberProvider.loadMemberUtils(context);
+  }
 
   List<TotalModel> getTotalList() {
     var format = DateFormat('dd/MM/yyyy');
@@ -59,95 +80,78 @@ class MemberDashBoard extends StatelessWidget {
     ];
   }
 
-  ListRow getListRow() {
-    var header = RowHeader([
-      "ID",
-      'NAME',
-      'MEMBER RANK',
-      'TOTAL POINT',
-      'USED POINT',
-      'CURRENT POINT',
-      'JOIN DATE',
-      'ACTION'
-    ]);
-    var rows = <MemberRow>[
-      for (var i = 0; i < 10; i++)
-        MemberRow(
-          Member(
-              id: '1',
-              name: 'Phan Trung Tin',
-              image: 'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-              rank: Rank(
-                'assets/images/icon_diamond.png',
-                'Diamond',
-                0xFFA020F0,
-              ),
-              totalPoint: 3107,
-              usedPoint: 2022,
-              currentPoint: 1095,
-              joinDate: DateTime.now(),
-              hide: false),
-        ),
-    ];
-    var rate = <int>[1, 4, 2, 2, 2, 2, 2, 2];
-    var table = ListRow(header: header, rows: rows, rate: rate);
+  ListRow convertListRow(
+    List<String> headers,
+    List<MemberModel> members,
+    List<int> rates,
+  ) {
+    var header = RowHeader(headers);
+    var rows = members.map((e) => MemberRow(e)).toList();
+    var table = ListRow(header: header, rows: rows, rate: rates);
     return table;
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var utils = getTotalList();
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: IntrinsicHeight(
-            child: Row(
-              children: utils
-                  .map(
-                    (util) => Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: TotalWidget(util: util),
+    return Consumer<MemberProvider>(
+      builder: (context, instance, child) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: IntrinsicHeight(
+              child: Row(
+                children: utils
+                    .map(
+                      (util) => Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TotalWidget(util: util),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             ),
           ),
-        ),
-        const FilterWidget(
-          hasCreate: false,
-          items: [
-            [
-              'Rank',
-              'Diamond',
-              'Gold',
-              'Sliver',
-              'Bronze',
-              'New',
+          const FilterWidget(
+            hasCreate: false,
+            items: [
+              [
+                'Rank',
+                'Diamond',
+                'Gold',
+                'Sliver',
+                'Bronze',
+                'New',
+              ],
+              [
+                'Sort by',
+                'Member rank',
+                'Total point',
+                'Used point',
+                'Current point',
+                'Join date',
+                'Action'
+              ],
             ],
-            [
-              'Sort by',
-              'Member rank',
-              'Total point',
-              'Used point',
-              'Current point',
-              'Join date',
-              'Action'
-            ],
-          ],
-        ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
-            child: ListWidget<MemberRow>(
-              table: getListRow(),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(left: 32, right: 32, top: 16),
+              child: ListWidget<MemberRow>(
+                table: convertListRow(
+                  instance.headers,
+                  instance.members,
+                  instance.rates,
+                ),
+              ),
             ),
           ),
-        ),
-        const PagingWidget(),
-      ],
+          const PagingWidget(),
+        ],
+      ),
     );
   }
 }

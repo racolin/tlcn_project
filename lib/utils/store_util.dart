@@ -1,3 +1,5 @@
+import '../services/rest_api/api.dart';
+
 class StoreUtil {
   final String id;
   final String name;
@@ -17,10 +19,12 @@ class StoreUtil {
 
   factory StoreUtil.fromJson(Map<String, dynamic> json) {
     return StoreUtil(
-      id: json['id'] ?? '',
+      id: json['_id'] ?? '',
       name: json['name'] ?? '',
-      updatedAt: json['updatedAt'] ?? '',
-      mainImage: json['mainImage'] ?? '',
+      updatedAt: json['updatedAt'] == null ? DateTime.now() : DateTime.parse(json['updatedAt']),
+      mainImage: Api().getFullImageUrl(
+        json['mainImage'],
+      ),
       fullAddress: json['fullAddress'] ?? '',
       sale: SaleUtil.fromJson(json['sale'] ?? {}),
     );

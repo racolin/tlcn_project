@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tlcn_project/models/branch_model.dart';
 import 'package:tlcn_project/models/store_model.dart';
 
 import '../../services/rest_api/api.dart';
@@ -63,8 +64,8 @@ class StoresProvider extends ChangeNotifier with ApiError {
   );
   StoreModel get storeSelected => _storeSelected;
   List<StoreUtil> _storeUtils = [];
-  List<StoreModel> get stores {
-    return _storeUtils.map((e) => StoreModel.fromUtil(e)).toList();
+  List<Branch> get stores {
+    return _storeUtils.map((e) => Branch.fromUtil(e)).toList();
   }
 
   void onCreate() {

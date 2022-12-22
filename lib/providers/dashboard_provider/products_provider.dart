@@ -25,6 +25,7 @@ class ProductsProvider extends ChangeNotifier with ApiError {
   List<ProductUtil> _productUtils = [];
   List<Product> get products => _productUtils.map((e) => Product.fromUtil(e)).toList();
   Product? get productSelected => _productSelected;
+
   Future<void> loadProductUtils(BuildContext context) async {
     await apiCallSafety(
           () => Api().getDioNotAuthor("product/admin/list", {}, context),

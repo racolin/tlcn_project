@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/resources/colors.dart';
 import 'package:tlcn_project/models/row_model.dart';
+import 'package:tlcn_project/supports/convert.dart';
 
 class MemberWidget extends StatelessWidget {
   final String name;
@@ -23,9 +24,15 @@ class MemberWidget extends StatelessWidget {
         const SizedBox(
           width: 16,
         ),
-        Text(
-          name,
-          style: TextStyle(fontSize: 16),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 236),
+          // width: 236,
+          child: Text(
+            name,
+            style: const TextStyle(fontSize: 16),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -93,27 +100,27 @@ class _MemberItemWidgetState extends State<MemberItemWidget> {
                 flex: widget.rate[3],
                 child: Text(
                   member.totalPoint.toString(),
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(
                 flex: widget.rate[4],
                 child: Text(
                   member.usedPoint.toString(),
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(
                 flex: widget.rate[5],
                 child: Text(
                   member.currentPoint.toString(),
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
               Expanded(
                 flex: widget.rate[6],
                 child: Text(
-                  member.joinDate.toString(),
+                  dateToString(member.joinDate, 'dd/MM/yyyy'),
                   style: const TextStyle(fontSize: 16),
                 ),
               ),

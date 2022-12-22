@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tlcn_project/models/rank_model.dart';
 
 class RanksWidget extends StatelessWidget {
-  final List<Rank> ranks;
+  final List<RankModel> ranks;
 
   const RanksWidget({
     Key? key,

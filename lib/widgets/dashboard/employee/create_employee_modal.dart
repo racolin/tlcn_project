@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tlcn_project/models/row_model.dart';
 
 class CreateEmployeeModal extends StatefulWidget {
   const CreateEmployeeModal({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class _CreateEmployeeModalState extends State<CreateEmployeeModal> {
   var _email = TextEditingController();
   var _username = TextEditingController();
   var _mobile = TextEditingController();
+  var _role = '';
+  var _gender = '';
 
   @override
   void dispose() {
@@ -129,7 +132,9 @@ class _CreateEmployeeModalState extends State<CreateEmployeeModal> {
               ),
               RadioGroup(
                 title: 'Role',
-                onChanged: (value) {},
+                onChanged: (value) {
+                  _role = value;
+                },
                 options: const ['Admin', 'Salesperson', 'Warehouse Staff'],
               ),
               const SizedBox(
@@ -137,7 +142,9 @@ class _CreateEmployeeModalState extends State<CreateEmployeeModal> {
               ),
               RadioGroup(
                 title: 'Gender',
-                onChanged: (value) {},
+                onChanged: (value) {
+                  _gender = value;
+                },
                 options: const ['Male', 'Female', 'Other'],
               ),
               const SizedBox(
@@ -185,7 +192,17 @@ class _CreateEmployeeModalState extends State<CreateEmployeeModal> {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            EmployeeModel employee = EmployeeModel(
+              id: '',
+              image: '',
+              name: _name.text,
+              username: _username.text,
+              email: _email.text,
+              role: _role,
+              joinDate: DateTime.now(),
+              hide: false,
+            );
+            Navigator.of(context).pop(employee);
           },
           child: const Text(
             'Create',

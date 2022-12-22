@@ -1,5 +1,8 @@
+import 'package:tlcn_project/utils/member_util.dart';
+
 import '../../models/product_model.dart';
 import '../../models/rank_model.dart';
+import '../utils/employee_util.dart';
 
 class RowHeader {
   final List<String> headers;
@@ -28,7 +31,7 @@ class ListRow<T extends ItemRow> {
     return rows.isEmpty
         ? true
         : (rows[0].columnCounts == header.headers.length) &&
-        (header.headers.length == rate.length);
+            (header.headers.length == rate.length);
   }
 }
 
@@ -36,18 +39,18 @@ class ListRow<T extends ItemRow> {
 
 enum MemberType { bronze, sliver, gold, diamond }
 
-class Member {
+class MemberModel {
   final String id;
   final String image;
   final String name;
-  final Rank rank;
+  final RankModel rank;
   final int totalPoint;
   final int usedPoint;
   final int currentPoint;
   final DateTime joinDate;
   final bool hide;
 
-  Member({
+  MemberModel({
     required this.id,
     required this.image,
     required this.name,
@@ -58,10 +61,24 @@ class Member {
     required this.joinDate,
     required this.hide,
   });
+
+  factory MemberModel.fromUtil(MemberUtil util) {
+    return MemberModel(
+      id: util.id,
+      image: util.memberInfo.rank.display.icon,
+      name: '${util.firstName} ${util.lastName}',
+      rank: RankModel.fromUtil(util.memberInfo.rank),
+      totalPoint: util.memberInfo.expiredPoint,
+      usedPoint: util.memberInfo.usedPoint,
+      currentPoint: util.memberInfo.currentPoint,
+      joinDate: util.joinedAt,
+      hide: false,
+    );
+  }
 }
 
 class MemberRow extends ItemRow {
-  final Member member;
+  final MemberModel member;
 
   MemberRow(
     this.member,
@@ -72,7 +89,7 @@ class MemberRow extends ItemRow {
 
 //Employee
 
-class Employee {
+class EmployeeModel {
   final String id;
   final String image;
   final String name;
@@ -82,7 +99,7 @@ class Employee {
   final DateTime joinDate;
   final bool hide;
 
-  Employee({
+  EmployeeModel({
     required this.id,
     required this.image,
     required this.name,
@@ -92,10 +109,23 @@ class Employee {
     required this.joinDate,
     required this.hide,
   });
+
+  factory EmployeeModel.fromUtil(EmployeeUtil util) {
+    return EmployeeModel(
+      id: util.id,
+      image: util.image,
+      name: util.name,
+      username: util.username,
+      email: util.email,
+      role: util.role,
+      joinDate: util.joinDate,
+      hide: util.hide,
+    );
+  }
 }
 
 class EmployeeRow extends ItemRow {
-  final Employee employee;
+  final EmployeeModel employee;
 
   EmployeeRow(
     this.employee,
@@ -110,7 +140,7 @@ class Coupon {
   final String id;
   final String code;
   final String title;
-  final List<Rank> applyTo;
+  final List<RankModel> applyTo;
   final int appliedTime;
   final String scope;
   final String type;
@@ -142,7 +172,7 @@ class Promotion {
   final String id;
   final String partner;
   final String title;
-  final List<Rank> applyTo;
+  final List<RankModel> applyTo;
   final String coupon;
   final String cost;
   final String status;
@@ -162,6 +192,7 @@ class Promotion {
 
 class PromotionRow extends ItemRow {
   final Promotion promotion;
+
   PromotionRow({required this.promotion}) {
     _columnCounts = 8;
   }
@@ -169,6 +200,7 @@ class PromotionRow extends ItemRow {
 
 class ProductRow extends ItemRow {
   final Product product;
+
   ProductRow({required this.product}) {
     _columnCounts = 7;
   }
