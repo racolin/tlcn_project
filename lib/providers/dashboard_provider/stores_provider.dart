@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:tlcn_project/models/branch_model.dart';
 import 'package:tlcn_project/models/store_model.dart';
@@ -6,62 +10,34 @@ import '../../services/rest_api/api.dart';
 import '../../services/rest_api/api_error.dart';
 import '../../services/rest_api/api_error_type.dart';
 import '../../utils/store_util.dart';
+import 'package:http_parser/http_parser.dart';
 
 enum StoresScreenType { main, edit }
 
 class StoresProvider extends ChangeNotifier with ApiError {
-
   StoresScreenType _storesScreenType = StoresScreenType.main;
+
   StoresScreenType get storeScreenType => _storesScreenType;
 
   String keyword = '';
   Map<String, String> filter = {};
 
+  List<String> deletedImages = [];
+  List<Uint8List> newImages = [];
+
   bool loading = false;
-  StoreModel _storeSelected = StoreModel(
-    id: '1',
-    images: [
-      'https://i.imgur.com/rg3GBhd.jpg',
-      'https://i.imgur.com/rg3GBhd.jpg',
-      'https://i.imgur.com/rg3GBhd.jpg',
-    ],
-    storeName: 'HCM Huynh Tan Phat',
-    openTime: const TimeOfDay(hour: 7, minute: 30),
-    closeTime: const TimeOfDay(hour: 22, minute: 00),
-    address: '300 Huynh Tan Phat, Phu Thuan, Quan 7, Ho Chi Minh City',
-    storeServices: [
-      ServiceModel(icon: Icons.car_rental, serviceName: 'Car parking'),
-      ServiceModel(icon: Icons.home, serviceName: 'In-site service'),
-      ServiceModel(icon: Icons.shopping_bag, serviceName: 'Pick up service'),
-      ServiceModel(
-          icon: Icons.directions_bike, serviceName: 'Delivery service'),
-    ],
-    itemMenus: [
-      ItemMenu(
-          storeProduct: StoreProduct(
-            name: 'Bac Xiu',
-            image:
-                'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-          ),
-          available: true),
-      ItemMenu(
-          storeProduct: StoreProduct(
-            name: 'Tra den Machiato',
-            image:
-                'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-          ),
-          available: false),
-      ItemMenu(
-          storeProduct: StoreProduct(
-            name: 'Hi-Tea dau tay man muoi Aloe Vera',
-            image:
-                'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-          ),
-          available: true),
-    ],
-  );
-  StoreModel get storeSelected => _storeSelected;
+
+  bool isCreate = false;
+
+  StoreInfoUtil _storeSelected = StoreInfoUtil.fromJson({});
+  StoreDetailUtil store = StoreDetailUtil.fromJson({});
+
+  StoreModel get storeSelected {
+    return StoreModel.fromUtil(_storeSelected);
+  }
+
   List<StoreUtil> _storeUtils = [];
+
   List<Branch> get stores {
     return _storeUtils.map((e) => Branch.fromUtil(e)).toList();
   }
@@ -69,6 +45,14 @@ class StoresProvider extends ChangeNotifier with ApiError {
   void onCreate() {
     if (_storesScreenType != StoresScreenType.edit) {
       _storesScreenType = StoresScreenType.edit;
+      isCreate = true;
+      notifyListeners();
+    }
+  }
+
+  void onCancel() {
+    if (_storesScreenType != StoresScreenType.main) {
+      _storesScreenType = StoresScreenType.main;
       notifyListeners();
     }
   }
@@ -78,11 +62,23 @@ class StoresProvider extends ChangeNotifier with ApiError {
     loadStoreUtils(context);
   }
 
+  String _getParams() {
+    List<String> result = [];
+    if (keyword.isNotEmpty) {
+      result.add('keyword=$keyword');
+    }
+    filter.forEach((key, value) {
+      if (value.isNotEmpty) {
+        result.add('$key=$value');
+      }
+    });
+    return result.isNotEmpty ? '?${result.join('&')}' : '';
+  }
+
   Future<void> loadStoreUtils(BuildContext context) async {
+    String param = _getParams();
     await apiCallSafety(
-          () => Api().getDioNotAuthor("store/admin-app/list", {
-            'keyword': keyword,
-          }, context),
+      () => Api().getDioNotAuthor("store/admin-app/list$param", {}, context),
       onStart: () async {
         loading = true;
       },
@@ -105,34 +101,146 @@ class StoresProvider extends ChangeNotifier with ApiError {
     );
   }
 
-  void selectStore(String id) {
-    _storeSelected = StoreModel(
-      id: id,
-      images: [
-        'https://i.imgur.com/rg3GBhd.jpg',
-        'https://i.imgur.com/rg3GBhd.jpg',
-        'https://i.imgur.com/rg3GBhd.jpg',
-      ],
-      storeName: 'The Coffee House',
-      openTime: const TimeOfDay(hour: 7, minute: 30),
-      closeTime: const TimeOfDay(hour: 22, minute: 00),
-      address: '300 Huynh Tan Phat, Phu Thuan, Quan 7, Ho Chi Minh City',
-      storeServices: [
-        ServiceModel(icon: Icons.car_rental, serviceName: 'Car parking'),
-        ServiceModel(icon: Icons.home, serviceName: 'In-site service'),
-        ServiceModel(icon: Icons.shopping_bag, serviceName: 'Pick up service'),
-        ServiceModel(
-            icon: Icons.directions_bike, serviceName: 'Delivery service'),
-      ],
-      itemMenus: [],
+  Future<void> loadDetailStoreUtil(BuildContext context, String id) async {
+    await apiCallSafety(
+      () => Api().getDioNotAuthor("store/admin-app/$id/detail", {}, context),
+      onStart: () async {
+        loading = true;
+      },
+      onCompleted: (bool? status, dynamic res) async {
+        loading = false;
+        if (status != null && status && res != null) {
+          if (res["data"] != null) {
+            _storeSelected = StoreInfoUtil.fromJson(res['data']);
+            store = _storeSelected.storeDetail;
+            notifyListeners();
+          }
+        }
+      },
+      onError: (dynamic error) async {
+        final ApiErrorType errorType = await parseApiErrorType(error);
+        error = errorType.message;
+      },
+      skipOnError: true,
     );
+  }
+
+  void save(BuildContext context) {
+    if (isCreate) {
+      // saveStore(context);
+    } else {
+      // updateStore(context);
+    }
+  }
+
+  void saveImages(BuildContext context) async {
+    List<MultipartFile> files = newImages
+        .map((newImage) => MultipartFile.fromBytes(
+              newImage,
+              contentType: MediaType('image', 'jpeg'),
+            ))
+        .toList();
+
+    FormData data = FormData.fromMap({
+      'deletedImages': jsonEncode(deletedImages),
+      "newImages": files,
+    });
+
+    await apiCallSafety(
+      () => Api().patchFileDio("store/${store.id}/update-image", data, context),
+      onStart: () async {
+        loading = true;
+      },
+      onCompleted: (bool? status, dynamic res) async {
+        loading = false;
+        if (status != null && status && res != null) {
+          if (res["data"] != null) {
+            _storeSelected = StoreInfoUtil.fromJson(res['data']);
+            notifyListeners();
+          }
+        }
+      },
+      onError: (dynamic error) async {
+        final ApiErrorType errorType = await parseApiErrorType(error);
+        error = errorType.message;
+      },
+      skipOnError: true,
+    );
+  }
+
+  // Future<void> saveStore(BuildContext context) async {
+  //   await apiCallSafety(
+  //     () => Api().getDioNotAuthor("store/admin-app/$id/detail", {}, context),
+  //     onStart: () async {
+  //       loading = true;
+  //     },
+  //     onCompleted: (bool? status, dynamic res) async {
+  //       loading = false;
+  //       if (status != null && status && res != null) {
+  //         if (res["data"] != null) {
+  //           _storeSelected = StoreInfoUtil.fromJson(res['data']);
+  //           notifyListeners();
+  //         }
+  //       }
+  //     },
+  //     onError: (dynamic error) async {
+  //       final ApiErrorType errorType = await parseApiErrorType(error);
+  //       error = errorType.message;
+  //     },
+  //     skipOnError: true,
+  //   );
+  // }
+  //
+  // Future<void> updateStore(BuildContext context) async {
+  //   await apiCallSafety(
+  //     () => Api().getDioNotAuthor("store/admin-app/$id/detail", {}, context),
+  //     onStart: () async {
+  //       loading = true;
+  //     },
+  //     onCompleted: (bool? status, dynamic res) async {
+  //       loading = false;
+  //       if (status != null && status && res != null) {
+  //         if (res["data"] != null) {
+  //           _storeSelected = StoreInfoUtil.fromJson(res['data']);
+  //           notifyListeners();
+  //         }
+  //       }
+  //     },
+  //     onError: (dynamic error) async {
+  //       final ApiErrorType errorType = await parseApiErrorType(error);
+  //       error = errorType.message;
+  //     },
+  //     skipOnError: true,
+  //   );
+  // }
+
+  void selectStore(BuildContext context, String id) {
+    deletedImages = [];
+    newImages = [];
     _storesScreenType = StoresScreenType.edit;
-    notifyListeners();
+    isCreate = false;
+    loadDetailStoreUtil(context, id);
   }
 
   @override
   Future<int> onApiError(error) {
-    // TODO: implement onApiError
     throw UnimplementedError();
+  }
+
+  void swap(String id) {
+    print(id);
+    int index = _storeSelected.allProductsInShort.indexWhere((e) => e.id == id);
+    if (index != -1) {
+      int i = _storeSelected.storeDetail.unavailableProducts
+          .indexWhere((e) => e.id == id);
+      if (i == -1) {
+        _storeSelected.storeDetail.unavailableProducts.add(
+          _storeSelected.allProductsInShort.firstWhere((e) => e.id == id),
+        );
+      } else {
+        _storeSelected.storeDetail.unavailableProducts.removeAt(i);
+      }
+      notifyListeners();
+    }
   }
 }

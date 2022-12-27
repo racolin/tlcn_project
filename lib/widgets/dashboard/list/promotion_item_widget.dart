@@ -66,7 +66,7 @@ class _PromotionItemWidgetState extends State<PromotionItemWidget> {
               Expanded(
                 flex: widget.rate[5],
                 child: Text(
-                  promotion.cost,
+                  promotion.cost.toString(),
                   style: TextStyle(fontSize: 16),
                 ),
               ),

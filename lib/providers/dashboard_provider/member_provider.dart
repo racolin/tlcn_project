@@ -61,9 +61,24 @@ class MemberProvider extends ChangeNotifier with ApiError {
     loadMemberUtils(context);
   }
 
+
+  String _getParams() {
+    List<String> result = [];
+    if (keyword.isNotEmpty) {
+      result.add('keyword=$keyword');
+    }
+    filter.forEach((key, value) {
+      if (value.isNotEmpty) {
+        result.add('$key=$value');
+      }
+    });
+    return result.isNotEmpty ? '?${result.join('&')}' : '';
+  }
+
   Future<void> loadMemberUtils(BuildContext context) async {
+    String param = _getParams();
     await apiCallSafety(
-      () => Api().getDio("member/list", {}, context),
+      () => Api().getDio("member/list$param", {}, context),
       onStart: () async {
         loading = true;
       },

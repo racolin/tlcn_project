@@ -22,6 +22,7 @@ class ProductModel {
   });
 
   factory ProductModel.fromUtil(ProductUtil util) {
+    print(util.deleted);
     return ProductModel(
       id: util.id,
       image: util.mainImage,

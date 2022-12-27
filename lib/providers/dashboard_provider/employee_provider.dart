@@ -28,50 +28,8 @@ class EmployeeProvider extends ChangeNotifier with ApiError {
     'ACTION'
   ];
   List<int> rates = [1, 4, 2, 4, 2, 2, 2];
-  var rows = [
-    for (var i = 0; i < 0; i++)
-      EmployeeRow(
-        EmployeeModel(
-          id: '1',
-          name: 'Phan Trung Tin',
-          image:
-              'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-          username: 'admin1',
-          email: 'phantrungtin01@gmail.com',
-          role: 'admin',
-          joinDate: DateTime.now(),
-          hide: false,
-        ),
-      ),
-    EmployeeRow(
-      EmployeeModel(
-        id: '1',
-        name: 'Phan Trung Tín',
-        image:
-            'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-        username: 'admin01',
-        email: 'phantrungtin01@gmail.com',
-        role: 'admin',
-        joinDate: DateTime.now(),
-        hide: false,
-      ),
-    ),
-    EmployeeRow(
-      EmployeeModel(
-        id: '2',
-        name: 'Nguyễn Quang Vinh',
-        image:
-            'https://genk.mediacdn.vn/139269124445442048/2022/5/16/photo-1-1652713299647160238202-1652713647852-16527136480582024311731.jpg',
-        username: 'salesman01',
-        email: '19110450@student.hcmute.edu.vn',
-        role: 'salesman',
-        joinDate: DateTime.now(),
-        hide: false,
-      ),
-    ),
-  ];
 
-  EmployeeModel _employeeSelected = EmployeeModel(
+  final EmployeeModel _employeeSelected = EmployeeModel(
     id: '1',
     name: 'Phan Trung Tin',
     image:
@@ -115,14 +73,27 @@ class EmployeeProvider extends ChangeNotifier with ApiError {
     return result;
   }
 
+  String _getParams() {
+    List<String> result = [];
+    if (keyword.isNotEmpty) {
+      result.add('keyword=$keyword');
+    }
+    filter.forEach((key, value) {
+      if (value.isNotEmpty) {
+        result.add('$key=$value');
+      }
+    });
+    return result.isNotEmpty ? '?${result.join('&')}' : '';
+  }
+
   Future<void> loadEmployeeUtils(BuildContext context) async {
+    String param = _getParams();
     await apiCallSafety(
       () => Api().getDioNotAuthor(
-          "employee/create",
+          "employee/list$param",
           {
-            'keyword': keyword,
           },
-          context),
+          context,),
       onStart: () async {
         loading = true;
       },

@@ -21,7 +21,7 @@ class RanksWidget extends StatelessWidget {
               left: i * 18,
               height: 36,
               width: 36,
-              child: Image.asset(
+              child: Image.network(
                 ranks[i].image,
                 width: 36,
                 height: 36,

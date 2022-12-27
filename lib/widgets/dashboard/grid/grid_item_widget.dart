@@ -5,15 +5,17 @@ import 'package:tlcn_project/models/product_model.dart';
 
 class BranchItemGrid extends StatelessWidget {
   final Branch branch;
+  final Function(String) onSelect;
 
   const BranchItemGrid({
     Key? key,
     required this.branch,
+    required this.onSelect,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: 235,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -24,7 +26,9 @@ class BranchItemGrid extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(16),
               ),
-              onTap: () {},
+              onTap: () {
+                onSelect(branch.id);
+              },
               onHover: (status) {},
               child: Container(
                 decoration: const BoxDecoration(
@@ -112,8 +116,16 @@ class ProductItemGrid extends StatelessWidget {
               onHover: (status) {},
               onTap: () {},
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(16),
+                  ),
+                  color: product.hide ? Colors.white : Colors.tealAccent.withAlpha(50),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 12,
+                ),
                 alignment: Alignment.topLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,8 +163,10 @@ class ProductItemGrid extends StatelessWidget {
                         IconButton(
                           onPressed: () {},
                           splashRadius: 20,
-                          icon: const Icon(
-                            Icons.visibility_off,
+                          icon: Icon(
+                            product.hide
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             size: 16,
                           ),
                           color: Colors.grey,

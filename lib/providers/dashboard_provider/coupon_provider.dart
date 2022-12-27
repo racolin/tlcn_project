@@ -1,37 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:tlcn_project/models/row_model.dart';
 import 'package:tlcn_project/services/rest_api/api_error.dart';
+import 'package:tlcn_project/utils/coupon_util.dart';
 
 import '../../services/rest_api/api.dart';
 import '../../services/rest_api/api_error_type.dart';
-import '../../utils/promotion_util.dart';
 
-class PromotionProvider extends ChangeNotifier with ApiError {
+class CouponProvider extends ChangeNotifier with ApiError {
   String keyword = '';
   Map<String, String> filter = {};
   bool loading = false;
-  List<PromotionUtil> _promotions = [];
-
-  List<PromotionModel> get promotions =>
-      _promotions.map((e) => PromotionModel.fromUtil(e)).toList();
-
+  List<CouponUtil> _coupons = [];
   List<String> headers = [
-    "ID",
-    'PARTNER',
-    'TITLE',
-    'APPLY TO',
-    'COUPON',
-    'COST',
-    'STATUS',
-    'ACTION'
+  "ID",
+  'CODE',
+  'IMAGE',
+  'TITLE',
+  'APPLIED TIME',
+  'ACTION'
   ];
 
-  List<int> rates = [3, 2, 3, 2, 1, 1, 2, 2];
+  List<int> rates = [2, 1, 1, 3, 1, 2];
 
-  void loadPromotions(BuildContext context) async {
+  List<CouponModel> get coupons => _coupons.map((e) => CouponModel.fromUtil(e)).toList();
+
+  void loadCoupons(BuildContext context) async {
     await apiCallSafety(
-      () => Api().getDioNotAuthor("promotion/admin/all", {}, context),
+          () => Api().getDioNotAuthor("coupon/admin/all", {}, context),
       onStart: () async {
         loading = true;
       },
@@ -39,8 +35,8 @@ class PromotionProvider extends ChangeNotifier with ApiError {
         loading = false;
         if (status != null && status && res != null) {
           if (res["data"] != null && res['data'] is List) {
-            _promotions = (res['data'] as List)
-                .map((e) => PromotionUtil.fromJson(e))
+            _coupons = (res['data'] as List)
+                .map((e) => CouponUtil.fromJson(e))
                 .toList();
             notifyListeners();
           }
@@ -69,6 +65,7 @@ class PromotionProvider extends ChangeNotifier with ApiError {
 
   @override
   Future<int> onApiError(error) {
+    // TODO: implement onApiError
     throw UnimplementedError();
   }
 

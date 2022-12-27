@@ -19,16 +19,45 @@ class ItemMenu {
     required this.storeProduct,
     required this.available,
   });
+
+  factory ItemMenu.fromUtil(ProductShortUtil util, bool unavailable) {
+    return ItemMenu(
+      storeProduct: StoreProduct.fromUtil(util),
+      available: !unavailable,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is! ItemMenu) {
+      return false;
+    }
+    return other.available == available && other.storeProduct.id == storeProduct.id;
+  }
+
+  @override
+  int get hashCode => Object.hash(available, storeProduct.id);
+
 }
 
 class StoreProduct {
+  final String id;
   final String image;
   final String name;
 
   StoreProduct({
+    required this.id,
     required this.name,
     required this.image,
   });
+
+  factory StoreProduct.fromUtil(ProductShortUtil util) {
+    return StoreProduct(
+      id: util.id,
+      name: util.name,
+      image: util.mainImage,
+    );
+  }
 }
 
 class StoreModel {
@@ -52,16 +81,23 @@ class StoreModel {
     required this.itemMenus,
   });
 
-  factory StoreModel.fromUtil(StoreUtil util) {
+  factory StoreModel.fromUtil(StoreInfoUtil util) {
+    List<ItemMenu> ims = [];
+    for (var item in util.allProductsInShort) {
+      ims.add(ItemMenu(
+          storeProduct: StoreProduct.fromUtil(item),
+          available: !util.storeDetail.unavailableProducts
+              .any((e) => e.id == item.id)));
+    }
     return StoreModel(
-      id: util.id,
-      images: [],
-      storeName: util.name,
-      openTime: TimeOfDay.now(),
-      closeTime: TimeOfDay.now(),
-      address: util.fullAddress,
+      id: util.storeDetail.id,
+      images: util.storeDetail.images,
+      storeName: util.storeDetail.name,
+      openTime: util.storeDetail.dailyTime.open.toTimeOfDay(),
+      closeTime: util.storeDetail.dailyTime.close.toTimeOfDay(),
+      address: util.storeDetail.address.toFullAddress(),
       storeServices: [],
-      itemMenus: [],
+      itemMenus: ims,
     );
   }
 }

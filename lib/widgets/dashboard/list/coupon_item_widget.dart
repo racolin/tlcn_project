@@ -47,14 +47,22 @@ class _CouponItemWidgetState extends State<CouponItemWidget> {
               ),
               Expanded(
                 flex: widget.rate[2],
-                child: Text(
-                  coupon.title,
-                  style: TextStyle(fontSize: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      coupon.image,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
                 flex: widget.rate[3],
-                child: RanksWidget(ranks: coupon.applyTo,),
+                child: Text(
+                  coupon.title,
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               Expanded(
                 flex: widget.rate[4],
@@ -65,20 +73,6 @@ class _CouponItemWidgetState extends State<CouponItemWidget> {
               ),
               Expanded(
                 flex: widget.rate[5],
-                child: Text(
-                  coupon.scope,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              Expanded(
-                flex: widget.rate[6],
-                child: Text(
-                  coupon.type,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              Expanded(
-                flex: widget.rate[7],
                 child: Row(
                   children: [
                     IconButton(

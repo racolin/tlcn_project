@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/models/row_model.dart';
+import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
 import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_item_widget.dart';
@@ -58,14 +59,38 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
           onCreate: (ProductModel product) {},
           items: [
             FilterModel(
+              key: 'status',
+              name: 'Trạng thái',
+              values: [
+                FilterFieldModel(value: '', name: 'Trạng thái'),
+                FilterFieldModel(value: 'all', name: 'Tất cả'),
+                FilterFieldModel(value: 'disabled', name: 'Disabled'),
+                FilterFieldModel(value: 'enable', name: 'Enable'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
               key: 'sortBy',
               name: 'Lọc theo',
               values: [
+                FilterFieldModel(value: '', name: 'Lọc theo'),
                 FilterFieldModel(value: '_id', name: 'Mã id'),
-                FilterFieldModel(value: 'email', name: 'Email'),
-                FilterFieldModel(value: 'mobile', name: 'Điện thoại'),
-                FilterFieldModel(value: 'firstName', name: 'Họ'),
-                FilterFieldModel(value: 'lastName', name: 'Tên'),
+                FilterFieldModel(value: 'name', name: 'Tên'),
+                FilterFieldModel(value: 'originalPrice', name: 'Giá cả'),
+                FilterFieldModel(value: 'updatedAt', name: 'Cập nhật'),
+                FilterFieldModel(value: 'saleOfWeek', name: 'Bán chạy'),
+                FilterFieldModel(value: 'changedAmount', name: 'Thay đổi'),
+                FilterFieldModel(value: 'categoryName', name: 'Tên nhóm'),
+              ],
+              itemSelected: 0,
+            ),
+            FilterModel(
+              key: 'sortOrder',
+              name: 'Sắp xếp',
+              values: [
+                FilterFieldModel(value: '', name: 'Sắp xếp'),
+                FilterFieldModel(value: 'asc', name: 'Tăng dần'),
+                FilterFieldModel(value: 'desc', name: 'Giảm dần'),
               ],
               itemSelected: 0,
             ),
@@ -186,9 +211,10 @@ class _ProductsDashboardState extends BaseStateful<ProductsDashboard> {
           width: 396,
           padding: const EdgeInsets.all(16),
           child: const ManageImagesWidget(
+            type: DashboardType.product,
             itemSize: Size(140, 140),
             padding: 8,
-            title: 'Products Images',
+            // title: 'Products Images',
           ),
         ),
         Expanded(

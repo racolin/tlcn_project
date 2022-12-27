@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -375,6 +376,54 @@ class Api {
     );
     var result = await wrapE(
       () => dio.post<Map<String, dynamic>>(
+        '$resource$url',
+        data: data,
+        options: options,
+      ),
+      context,
+    ).timeout(const Duration(seconds: 30));
+    if (result.statusCode == 200) {
+      if (result.data!["message"]["type"] != 0) {
+        throw DioError(
+          requestOptions: RequestOptions(path: ""),
+          error: result.data!["message"]["message"].toString(),
+          type: DioErrorType.response,
+        );
+      }
+    } else if (result.statusCode == 400) {
+      throw DioError(
+        requestOptions: RequestOptions(path: ""),
+        error: result.data!["errors"][0]["message"],
+        type: DioErrorType.response,
+      );
+    } else if (result.statusCode == 500) {
+      throw DioError(
+          requestOptions: RequestOptions(path: ""),
+          error: result.data!["message"],
+          type: DioErrorType.response);
+    } else if (result.statusCode == 404) {
+      throw DioError(
+        requestOptions: RequestOptions(path: ""),
+        error: result.data!["message"],
+        type: DioErrorType.response,
+      );
+    }
+    return result.data;
+  }
+
+  Future<dynamic> patchFileDio(String url, FormData data, context) async {
+    final Options options = await getAuthOptions(
+      context,
+      contentType: "multipart/form-data",
+    );
+
+    options.headers?['content-type'] = "multipart/form-data";
+    options.headers?['Content-Type'] = "multipart/form-data";
+    options.contentType = 'multipart/form-data';
+    print(options.contentType);
+    print(jsonEncode(options.headers));
+    var result = await wrapE(
+      () => dio.patch(
         '$resource$url',
         data: data,
         options: options,

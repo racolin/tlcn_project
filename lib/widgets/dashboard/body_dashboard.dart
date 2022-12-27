@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/coupon_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
 import 'package:tlcn_project/providers/dashboard_provider/employee_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/member_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/promotion_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
 import 'package:tlcn_project/widgets/dashboard/coupon/coupon_dashboard.dart';
@@ -42,12 +44,16 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
             );
           case DashboardType.employee:
             return ChangeNotifierProvider<EmployeeProvider>(
-              create: (context) => EmployeeProvider(),
+              create: (context) {
+                return EmployeeProvider();
+              },
               child: const EmployeeDashBoard(),
             );
           case DashboardType.store:
             return ChangeNotifierProvider<StoresProvider>(
-              create: (context) => StoresProvider(),
+              create: (context) {
+                return StoresProvider();
+              },
               child: const StoresDashboard(),
             );
           case DashboardType.product:
@@ -56,9 +62,15 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
               child: const ProductsDashboard(),
             );
           case DashboardType.coupon:
-            return const CouponDashboard();
+            return ChangeNotifierProvider<CouponProvider>(
+              create: (context) => CouponProvider(),
+              child: const CouponDashboard(),
+            );
           case DashboardType.promotion:
-            return const PromotionDashboard();
+            return ChangeNotifierProvider<PromotionProvider>(
+              create: (context) => PromotionProvider(),
+              child: const PromotionDashboard(),
+            );
           case DashboardType.memberSettings:
             return const Center(
               child: Text('Member Setting'),
@@ -69,7 +81,7 @@ class _BodyDashBoardState extends State<BodyDashBoard> {
             );
           case DashboardType.orderHistory:
             return const Center(
-              child: Text('Lịch sử đơn hàng'),
+              child: Text('Order History'),
             );
           default:
             return ChangeNotifierProvider<MemberProvider>(

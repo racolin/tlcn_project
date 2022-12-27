@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
 import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
 import 'package:tlcn_project/services/safety/base_stateful.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_widget.dart';
@@ -43,14 +44,18 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    switch (storeProvider.storeScreenType) {
-      case StoresScreenType.main:
-        return getMain();
-      case StoresScreenType.edit:
-        return getEdit(storeProvider.storeSelected);
-      default:
-        return getMain();
-    }
+    return Consumer<StoresProvider>(
+      builder: (context, instance, child) {
+        switch (instance.storeScreenType) {
+          case StoresScreenType.main:
+            return getMain();
+          case StoresScreenType.edit:
+            return getEdit(storeProvider.storeSelected);
+          default:
+            return getMain();
+        }
+      },
+    );
   }
 
   Widget getMain() {
@@ -63,6 +68,7 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
               key: 'status',
               name: 'Trạng thái',
               values: [
+                FilterFieldModel(value: '', name: 'Trạng thái'),
                 FilterFieldModel(value: 'all', name: 'Tất cả'),
                 FilterFieldModel(value: 'disabled', name: 'Disabled'),
                 FilterFieldModel(value: 'enable', name: 'Enable'),
@@ -73,10 +79,10 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
               key: 'sortBy',
               name: 'Lọc theo',
               values: [
+                FilterFieldModel(value: '', name: 'Lọc theo'),
                 FilterFieldModel(value: '_id', name: 'Mã id'),
                 FilterFieldModel(value: 'title', name: 'Tên'),
                 FilterFieldModel(value: 'code', name: 'Mã code'),
-                FilterFieldModel(value: 'amountApplyHour', name: 'Thời hạn'),
                 FilterFieldModel(value: 'deleted', name: 'Đã xoá'),
               ],
               itemSelected: 0,
@@ -85,6 +91,7 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
               key: 'sortOrder',
               name: 'Sắp xếp',
               values: [
+                FilterFieldModel(value: '', name: 'Sắp xếp'),
                 FilterFieldModel(value: 'asc', name: 'Tăng dần'),
                 FilterFieldModel(value: 'desc', name: 'Giảm dần'),
               ],
@@ -97,7 +104,11 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
             child: GridItemsWidget(
               padding: 24,
               list: instance.stores
-                  .map((branch) => BranchItemGrid(branch: branch))
+                  .map((branch) => BranchItemGrid(
+                      branch: branch,
+                      onSelect: (id) {
+                        storeProvider.selectStore(context, id);
+                      }))
                   .toList(),
             ),
           ),
@@ -108,29 +119,29 @@ class _StoresDashboardState extends BaseStateful<StoresDashboard> {
   }
 
   Widget getEdit(StoreModel store) {
-    return Row(
-      children: [
-        Container(
-          alignment: Alignment.topLeft,
-          width: 396,
-          padding: const EdgeInsets.all(16),
-          child: const ManageImagesWidget(
-            itemSize: Size(140, 140),
-            padding: 8,
-            title: 'Store Images',
-          ),
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: StoreDetailWidget(
-                store: store,
-              ),
+    return SingleChildScrollView(padding: const EdgeInsets.all(32),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!storeProvider.isCreate)
+          Container(
+            alignment: Alignment.topLeft,
+            width: 396,
+            padding: const EdgeInsets.all(16),
+            child: const ManageImagesWidget(
+              type: DashboardType.store,
+              itemSize: Size(140, 140),
+              padding: 8,
             ),
           ),
-        ),
-      ],
+          const Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: StoreDetailWidget(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

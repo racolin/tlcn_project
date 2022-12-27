@@ -29,9 +29,24 @@ class ProductsProvider extends ChangeNotifier with ApiError {
   List<ProductModel> get products => _productUtils.map((e) => ProductModel.fromUtil(e)).toList();
   ProductModel? get productSelected => _productSelected;
 
+
+  String _getParams() {
+    List<String> result = [];
+    if (keyword.isNotEmpty) {
+      result.add('keyword=$keyword');
+    }
+    filter.forEach((key, value) {
+      if (value.isNotEmpty) {
+        result.add('$key=$value');
+      }
+    });
+    return result.isNotEmpty ? '?${result.join('&')}' : '';
+  }
+
   Future<void> loadProductUtils(BuildContext context) async {
+    String param = _getParams();
     await apiCallSafety(
-          () => Api().getDioNotAuthor("product/admin/list", {}, context),
+          () => Api().getDioNotAuthor("product/admin/list$param", {}, context),
       onStart: () async {
         loading = true;
       },

@@ -24,6 +24,7 @@ class _ProductItemWidgetState extends State<ProductItemWidget> {
   @override
   Widget build(BuildContext context) {
     var product = widget.row.product;
+    color = widget.row.product.hide ? Colors.white : Colors.tealAccent;
     return Container(
       margin: const EdgeInsets.all(1),
       child: InkWell(

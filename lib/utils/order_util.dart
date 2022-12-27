@@ -109,7 +109,7 @@ class OrderStoreUtil {
 
   factory OrderStoreUtil.fromJson(Map<String, dynamic> json) {
     return OrderStoreUtil(
-      id: json['id'] ?? '',
+      id: json['_id'] ?? '',
       name: json['name'] ?? '',
       address: json['address'] ?? '',
     );
@@ -135,7 +135,7 @@ class OrderMemberUtil {
 
   factory OrderMemberUtil.fromJson(Map<String, dynamic> json) {
     return OrderMemberUtil(
-      id: json['id'] ?? '',
+      id: json['_id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
       mobile: json['mobile'] ?? '',
@@ -147,22 +147,39 @@ class OrderMemberUtil {
   }
 }
 
-class OrderCouponUtil {
+class CouponShortUtil {
   final String id;
   final String title;
   final String code;
-  final int discountAmount;
 
-  OrderCouponUtil({
+  CouponShortUtil({
     required this.id,
     required this.title,
     required this.code,
+  });
+
+  factory CouponShortUtil.fromJson(Map<String, dynamic> json) {
+    return CouponShortUtil(
+      id: json['_id'] ?? '',
+      title: json['title'] ?? '',
+      code: json['code'] ?? '',
+    );
+  }
+}
+
+class OrderCouponUtil extends CouponShortUtil {
+  final int discountAmount;
+
+  OrderCouponUtil({
+    required super.id,
+    required super.title,
+    required super.code,
     required this.discountAmount,
   });
 
   factory OrderCouponUtil.fromJson(Map<String, dynamic> json) {
     return OrderCouponUtil(
-      id: json['id'] ?? '',
+      id: json['_id'] ?? '',
       title: json['title'] ?? '',
       code: json['code'] ?? '',
       discountAmount: json['discountAmount'] ?? 0,

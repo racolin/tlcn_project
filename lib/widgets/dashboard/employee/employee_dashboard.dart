@@ -52,6 +52,7 @@ class _EmployeeDashBoardState extends BaseStateful<EmployeeDashBoard> {
               key: 'role',
               name: 'Lọc theo',
               values: [
+                FilterFieldModel(value: '', name: 'Lọc theo'),
                 FilterFieldModel(value: 'salesman', name: 'Nhân viên'),
                 FilterFieldModel(value: 'admin', name: 'Quản lý'),
               ],

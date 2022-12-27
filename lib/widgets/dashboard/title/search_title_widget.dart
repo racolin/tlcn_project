@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/promotion_provider.dart';
 
+import '../../../models/filter_model.dart';
+import '../../../providers/dashboard_provider/coupon_provider.dart';
 import '../../../providers/dashboard_provider/employee_provider.dart';
 import '../../../providers/dashboard_provider/member_provider.dart';
 import '../../../providers/dashboard_provider/products_provider.dart';
 import '../../../providers/dashboard_provider/stores_provider.dart';
+import '../filter/filter_item_widget.dart';
 
 class SearchTitleWidget extends StatefulWidget {
-  final Function(String) onSearch;
+  // final Function(String) onSearch;
+  final List<FilterModel> items;
 
   const SearchTitleWidget({
     Key? key,
-    required this.onSearch,
+    // required this.onSearch,
+    required this.items,
   }) : super(key: key);
 
   @override
@@ -21,6 +27,15 @@ class SearchTitleWidget extends StatefulWidget {
 
 class _SearchTitleWidgetState extends State<SearchTitleWidget> {
   final _controllerSearch = TextEditingController();
+  String title = '';
+
+  @override
+  void initState() {
+    title = Provider.of<DashboardProvider>(context, listen: false)
+        .itemSelected
+        .title;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,50 +70,17 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
             style: const TextStyle(
                 fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
           ),
-          // DropdownButton<String>(
-          //     underline: const SizedBox(),
-          //     value: filter,
-          //     items: const [
-          //       DropdownMenuItem(
-          //         value: '1',
-          //         child: Text('Dashboard'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '2',
-          //         child: Text('Member'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '3',
-          //         child: Text('Employee'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '4',
-          //         child: Text('Store'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '5',
-          //         child: Text('Product'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '6',
-          //         child: Text('Coupon'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '7',
-          //         child: Text('Member Settings'),
-          //       ),
-          //       DropdownMenuItem(
-          //         value: '8',
-          //         child: Text('App Settings'),
-          //       ),
-          //     ],
-          //     onChanged: (value) {
-          //       if (value != null) {
-          //         setState(() {
-          //           filter = value;
-          //         });
-          //       }
-          //     }),
+        ),
+        Row(
+          children: [
+            for (var item in widget.items)
+              FilterItemWidget(
+                items: item,
+                onSelect: (select) {
+                  item.itemSelected = select;
+                },
+              ),
+          ],
         ),
         Container(
           height: 48,
@@ -116,29 +98,75 @@ class _SearchTitleWidgetState extends State<SearchTitleWidget> {
                 listen: false,
               ).itemSelected.title) {
                 case 'Dashboard':
-                // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
                   return;
                 case 'Employee':
-                  Provider.of<EmployeeProvider>(context, listen: false)
-                      .onSearch(context, _controllerSearch.text);
+                  var provider = Provider.of<EmployeeProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.onSearch(context, _controllerSearch.text);
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
                   return;
                 case 'Store':
-                  Provider.of<StoresProvider>(context, listen: false)
-                      .onSearch(context, _controllerSearch.text);
+                  var provider = Provider.of<StoresProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
+                  provider.onSearch(context, _controllerSearch.text);
                   return;
                 case 'Product':
-                  Provider.of<ProductsProvider>(context, listen: false)
-                      .onSearch(context, _controllerSearch.text);
+                  var provider = Provider.of<ProductsProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
+
+                  provider.onSearch(context, _controllerSearch.text);
                   return;
                 case 'Member':
-                  Provider.of<MemberProvider>(context, listen: false)
-                      .onSearch(context, _controllerSearch.text);
+                  var provider = Provider.of<MemberProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
+                  provider.onSearch(context, _controllerSearch.text);
                   return;
                 case 'Coupon':
-                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  var provider = Provider.of<CouponProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
+                  provider.onSearch(context, _controllerSearch.text);
+                  return;
                   return;
                 case 'Promotion':
-                  // Provider.of<ProductsProvider>(context, listen: false).onCreate();
+                  var provider = Provider.of<PromotionProvider>(
+                    context,
+                    listen: false,
+                  );
+                  provider.filter = widget.items.fold({}, (pre, e) {
+                    pre.addAll({e.key: e.values[e.itemSelected].value});
+                    return pre;
+                  });
+                  provider.onSearch(context, _controllerSearch.text);
                   return;
                 case 'Order History':
                   // Provider.of<ProductsProvider>(context, listen: false).onCreate();

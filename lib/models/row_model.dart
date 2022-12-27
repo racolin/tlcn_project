@@ -1,8 +1,10 @@
+import 'package:tlcn_project/utils/coupon_util.dart';
 import 'package:tlcn_project/utils/member_util.dart';
 
 import '../../models/product_model.dart';
 import '../../models/rank_model.dart';
 import '../utils/employee_util.dart';
+import '../utils/promotion_util.dart';
 
 class RowHeader {
   final List<String> headers;
@@ -136,30 +138,37 @@ class EmployeeRow extends ItemRow {
 
 //Coupon
 
-class Coupon {
+class CouponModel {
   final String id;
   final String code;
+  final String image;
   final String title;
-  final List<RankModel> applyTo;
   final int appliedTime;
-  final String scope;
-  final String type;
   final bool hide;
 
-  Coupon({
+  CouponModel({
     required this.id,
     required this.code,
+    required this.image,
     required this.title,
-    required this.applyTo,
     required this.appliedTime,
-    required this.scope,
-    required this.type,
     required this.hide,
   });
+
+  factory CouponModel.fromUtil(CouponUtil util) {
+    return CouponModel(
+      id: util.id,
+      code: util.code,
+      image: util.image,
+      title: util.title,
+      appliedTime: util.amountApplyHour,
+      hide: util.deleted,
+    );
+  }
 }
 
 class CouponRow extends ItemRow {
-  final Coupon coupon;
+  final CouponModel coupon;
 
   CouponRow({required this.coupon}) {
     _columnCounts = 8;
@@ -174,7 +183,7 @@ class PromotionModel {
   final String title;
   final List<RankModel> applyTo;
   final String coupon;
-  final String cost;
+  final int cost;
   final String status;
   final bool hide;
 
@@ -188,6 +197,19 @@ class PromotionModel {
     required this.status,
     required this.hide,
   });
+
+  factory PromotionModel.fromUtil(PromotionUtil util) {
+    return PromotionModel(
+      id: util.id,
+      partner: 'The Coffee House',
+      title: util.title,
+      applyTo: util.applyTo.map((e) => RankModel.fromApplyUtil(e)).toList(),
+      coupon: util.coupon.id,
+      cost: util.cost,
+      status: util.opening ? 'Đang hoạt động' : 'Đã ngừng',
+      hide: util.deleted,
+    );
+  }
 }
 
 class PromotionRow extends ItemRow {

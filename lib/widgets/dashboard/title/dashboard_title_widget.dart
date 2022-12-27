@@ -31,9 +31,6 @@ class DashboardTitleWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
           ),
           const Spacer(),
-          SearchTitleWidget(onSearch: (search) {
-            print(search);
-          },),
           const SizedBox(width: 32),
           UserWidget(user: user),
         ],

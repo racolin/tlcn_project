@@ -21,11 +21,11 @@ class _FilterItemWidgetState extends State<FilterItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 24),
-      padding: const EdgeInsets.all(8),
+      // margin: const EdgeInsets.only(right: 24),
+      padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(8),
+        // borderRadius: BorderRadius.circular(8),
       ),
       child: DropdownButton<int>(
         isDense: true,

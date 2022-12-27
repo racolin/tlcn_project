@@ -38,7 +38,7 @@ class _DashBoardPageState extends BaseStateful<DashBoardPage> {
   @override
   void initDependencies(BuildContext context) {
     drawerItem = context.watch<DashboardProvider>().itemSelected;
-    context.watch<DashboardProvider>().loadUser(context);
+    context.read<DashboardProvider>().loadUser(context);
     super.initDependencies(context);
   }
 

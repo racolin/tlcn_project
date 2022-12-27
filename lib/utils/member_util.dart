@@ -109,9 +109,7 @@ class RankUtil {
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       rank: json['rank'] ?? 0,
-      display: json['display'] == null
-          ? RankDisplayUtil.empty()
-          : RankDisplayUtil.fromJson(json['display']),
+      display:  RankDisplayUtil.fromJson(json['display'] ?? {}),
       condition: json['condition'] ?? 0,
       coefficientPoint: json['coefficientPoint'] ?? 0,
       coupons: json['coupons'] ?? [],

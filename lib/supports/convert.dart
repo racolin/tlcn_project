@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 String numberToCurrency(num x, String symbol) {
@@ -10,4 +11,8 @@ String doubleToPercent(double x) {
 
 String dateToString(DateTime dateTime, String format) {
   return DateFormat(format).format(dateTime);
+}
+
+String timeToString(TimeOfDay timeOfDay) {
+  return "${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}";
 }

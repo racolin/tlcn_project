@@ -120,32 +120,7 @@ class _MemberDashBoardState extends BaseStateful<MemberDashBoard> {
           ),
           FilterWidget(
             onCreate: (MemberModel member) {},
-            items: [
-              FilterModel(
-                key: 'sortBy',
-                name: 'Lọc theo',
-                values: [
-                  FilterFieldModel(value: '_id', name: 'Mã id'),
-                  FilterFieldModel(value: 'email', name: 'Email'),
-                  FilterFieldModel(value: 'mobile', name: 'Điện thoại'),
-                  FilterFieldModel(value: 'firstName', name: 'Họ'),
-                  FilterFieldModel(value: 'lastName', name: 'Tên'),
-                ],
-                itemSelected: 0,
-              ),
-              FilterModel(
-                key: 'rank',
-                name: 'Rank',
-                values: [
-                  FilterFieldModel(value: 'new', name: 'Mới'),
-                  FilterFieldModel(value: 'bronze', name: 'Đồng'),
-                  FilterFieldModel(value: 'sliver', name: 'Bạc'),
-                  FilterFieldModel(value: 'gold', name: 'Vàng'),
-                  FilterFieldModel(value: 'diamond', name: 'Kim cương'),
-                ],
-                itemSelected: 0,
-              ),
-            ],
+            items: [],
           ),
           Expanded(
             child: Container(

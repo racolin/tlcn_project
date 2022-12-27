@@ -10,6 +10,8 @@ import 'package:tlcn_project/providers/dashboard_provider/dashboard_provider.dar
 import 'package:tlcn_project/widgets/dashboard/employee/create_employee_modal.dart';
 import 'package:tlcn_project/widgets/dashboard/filter/filter_item_widget.dart';
 
+import '../title/search_title_widget.dart';
+
 class FilterWidget extends StatelessWidget {
   final List<FilterModel> items;
   final Function? onCreate;
@@ -22,10 +24,9 @@ class FilterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title =
-        Provider.of<DashboardProvider>(context, listen: false)
-            .itemSelected
-            .title;
+    String title = Provider.of<DashboardProvider>(context, listen: false)
+        .itemSelected
+        .title;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       alignment: Alignment.centerRight,
@@ -75,86 +76,7 @@ class FilterWidget extends StatelessWidget {
               ),
             ),
           const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            decoration: BoxDecoration(
-              border: Border.all(),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                for (var item in items)
-                  FilterItemWidget(
-                    items: item,
-                    onSelect: (select) {
-                      item.itemSelected = select;
-                    },
-                  ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    switch (title) {
-                      case 'Employee':
-                        var provider = Provider.of<EmployeeProvider>(context, listen: false);
-                        provider.filter = items.fold({}, (pre, e) {
-                          pre.addAll({e.key: e.values[e.itemSelected].value});
-                          return pre;
-                        });
-                        provider.loadEmployeeUtils(context);
-                        return;
-                      case 'Store':
-                        var provider = Provider.of<StoresProvider>(context, listen: false);
-                        provider.filter = items.fold({}, (pre, e) {
-                          pre.addAll({e.key: e.values[e.itemSelected].value});
-                          return pre;
-                        });
-                        provider.loadStoreUtils(context);
-                        return;
-                      case 'Product':
-                        var provider = Provider.of<ProductsProvider>(context, listen: false);
-                        provider.filter = items.fold({}, (pre, e) {
-                          pre.addAll({e.key: e.values[e.itemSelected].value});
-                          return pre;
-                        });
-                        provider.loadProductUtils(context);
-                        return;
-                      case 'Dashboard':
-                        // Provider.of<ProductsProvider>(context, listen: false).onCreate();
-                        return;
-                      case 'Member':
-                        var provider = Provider.of<MemberProvider>(context, listen: false);
-                        provider.filter = items.fold({}, (pre, e) {
-                          pre.addAll({e.key: e.values[e.itemSelected].value});
-                          return pre;
-                        });
-                        provider.loadMemberUtils(context);
-                        return;
-                      case 'Coupon':
-                        // Provider.of<ProductsProvider>(context, listen: false).onCreate();
-                        return;
-                      case 'Promotion':
-                        // Provider.of<ProductsProvider>(context, listen: false).onCreate();
-                        return;
-                      case 'Order History':
-                        // Provider.of<ProductsProvider>(context, listen: false).onCreate();
-                        return;
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    child: const Text('Filter'),
-                  ),
-                )
-              ],
-            ),
-          ),
+          SearchTitleWidget(items: items),
         ],
       ),
     );

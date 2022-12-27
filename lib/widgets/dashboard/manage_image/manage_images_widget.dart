@@ -1,31 +1,73 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/dashboard_type.dart';
+import 'package:tlcn_project/providers/dashboard_provider/products_provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/store_provider.dart';
+import 'package:tlcn_project/providers/dashboard_provider/stores_provider.dart';
+import 'package:tlcn_project/services/safety/base_stateful.dart';
 import 'package:tlcn_project/widgets/dashboard/grid/grid_items_widget.dart';
 
 class ManageImagesWidget extends StatefulWidget {
-  final String title;
+  final DashboardType type;
   final Size itemSize;
   final double padding;
+  // final List<String> images;
 
   const ManageImagesWidget({
     Key? key,
+    required this.type,
     required this.itemSize,
     required this.padding,
-    required this.title,
+    // required this.images,
   }) : super(key: key);
 
   @override
   State<ManageImagesWidget> createState() => _ManageImagesWidgetState();
 }
 
-class _ManageImagesWidgetState extends State<ManageImagesWidget> {
-  final List<String> images = [
-    'assets/images/branch.png',
-    'assets/images/branch.png',
-    'assets/images/branch.png',
-  ];
+class _ManageImagesWidgetState extends BaseStateful<ManageImagesWidget> {
+  String title = '';
+  List<String> images = [];
+  final List<Uint8List> imageFiles = [];
+  ChangeNotifier? _provider;
+
+  @override
+  void initState() {
+    if (widget.type == DashboardType.store) {
+      title = 'Store Images';
+    } else if (widget.type == DashboardType.product) {
+      title = 'Product Images';
+    }
+    super.initState();
+  }
+
+  @override
+  void initDependencies(BuildContext context) {
+    if (widget.type == DashboardType.store) {
+      _provider = Provider.of<StoresProvider>(context, listen: false);
+    } else if (widget.type == DashboardType.product) {
+      _provider = Provider.of<ProductsProvider>(context, listen: false);
+    }
+    super.initDependencies(context);
+  }
+
+  @override
+  void afterFirstBuild(BuildContext context) {
+    if (widget.type == DashboardType.store) {
+      setState(() {
+        images = (_provider as StoresProvider).storeSelected.images;
+      });
+    } else if (widget.type == DashboardType.product) {
+      // images = (_provider as ProductsProvider).productSelected.;
+    }
+    super.afterFirstBuild(context);
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     var list = getList();
     list.add(getItemAdd());
     return Column(
@@ -46,11 +88,17 @@ class _ManageImagesWidgetState extends State<ManageImagesWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          widget.title,
+          title,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () {
+            if (widget.type == DashboardType.store) {
+              (_provider as StoresProvider).saveImages(context);
+            } else if (widget.type == DashboardType.product) {
+              // images = (_provider as ProductsProvider).productSelected.;
+            }
+          },
           style: ButtonStyle(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
@@ -60,9 +108,10 @@ class _ManageImagesWidgetState extends State<ManageImagesWidget> {
             ),
           ),
           child: const Text(
-            'Edit',
+            'Save',
             style: TextStyle(
               fontSize: 16,
+              color: Colors.green
             ),
           ),
         ),
@@ -75,31 +124,50 @@ class _ManageImagesWidgetState extends State<ManageImagesWidget> {
     if (images.isNotEmpty) {
       list = images
           .sublist(0, images.length - 1)
-          .map((image) => getItem(image))
+          .map((image) => getItem(url: image))
           .toList();
-
-      list.add(getItemSub(images.last));
     }
-
+    if (imageFiles.isNotEmpty) {
+      if (images.isNotEmpty) {
+        list.add(getItem(url: images.last));
+      }
+      list.addAll(imageFiles
+          .sublist(0, imageFiles.length - 1)
+          .map((e) => getItem(mem: e)));
+      list.add(getItemSub(mem: imageFiles.last));
+    } else {
+      if (images.isNotEmpty) {
+        list.add(getItemSub(url: images.last));
+      }
+    }
     return list;
   }
 
-  Widget getItem(String image) {
+  Widget getItem({String? url, Uint8List? mem}) {
+    assert(url == null || mem == null);
+    var image = url == null
+        ? Image.memory(
+            height: widget.itemSize.height,
+            width: widget.itemSize.width,
+            fit: BoxFit.cover,
+            mem!,
+          )
+        : Image.network(
+            height: widget.itemSize.height,
+            width: widget.itemSize.width,
+            fit: BoxFit.cover,
+            url,
+          );
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
-      child: Image.network(
-        height: widget.itemSize.height,
-        width: widget.itemSize.width,
-        fit: BoxFit.cover,
-        image,
-      ),
+      child: image,
     );
   }
 
-  Widget getItemSub(String image) {
+  Widget getItemSub({String? url, Uint8List? mem}) {
     return Stack(
       children: [
-        getItem(image),
+        getItem(url: url, mem: mem),
         Positioned(
           right: 8,
           top: 8,
@@ -107,7 +175,21 @@ class _ManageImagesWidgetState extends State<ManageImagesWidget> {
             splashRadius: 4,
             onPressed: () {
               setState(() {
-                images.removeLast();
+                if (url != null) {
+                  images.removeLast();
+                  if (_provider is StoresProvider) {
+                    (_provider as StoresProvider).deletedImages.add(url.split('/').last);
+                  } else if (_provider is ProductsProvider) {
+
+                  }
+                } else {
+                  imageFiles.removeLast();
+                  if (_provider is StoresProvider) {
+                    (_provider as StoresProvider).newImages.removeLast();
+                  } else if (_provider is ProductsProvider) {
+
+                  }
+                }
               });
             },
             icon: const Icon(
@@ -123,9 +205,21 @@ class _ManageImagesWidgetState extends State<ManageImagesWidget> {
   Widget getItemAdd() {
     return InkWell(
       onTap: () async {
-        setState(() {});
+        if (kIsWeb) {
+          final ImagePicker picker = ImagePicker();
+          XFile? image = await picker.pickImage(source: ImageSource.gallery);
+          if (image != null) {
+            var f = await image.readAsBytes();
+            setState(() {
+              imageFiles.add(f);
+              if (_provider is StoresProvider) {
+                (_provider as StoresProvider).newImages.add(f);
+              }
+            });
+          }
+        }
       },
-      child: getItem('assets/images/image_add.png'),
+      child: getItem(url: 'assets/images/image_add.png'),
     );
   }
 }
